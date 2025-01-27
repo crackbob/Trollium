@@ -26,10 +26,10 @@ import Killaura from "./modules/combat/Killaura";
 import TargetStrafe from "./modules/combat/TargetStrafe";
 import Velocity from "./modules/movement/Velocity";
 import ClickGUI from "./modules/visual/ClickGUI";
-import PickupReach from "./modules/misc/PickupReach";
 import FastCrouch from "./modules/movement/FastCrouch";
 import UITweaks from "./modules/visual/UITweaks";
 import Derp from "./modules/misc/Derp";
+import ItemReach from "./modules/misc/ItemReach";
 
 export default {
     modules: {},
@@ -91,7 +91,7 @@ export default {
         this.addModule(new Killaura());
         this.addModule(new TargetStrafe());
         this.addModule(new ClickGUI());
-        this.addModule(new PickupReach());
+        this.addModule(new ItemReach());
         this.addModule(new FastCrouch());
         this.addModule(new Derp());
 

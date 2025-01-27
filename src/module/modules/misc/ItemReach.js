@@ -2,9 +2,9 @@ import Module from "../../Module";
 import hooks from "../../../hooks";
 import mathUtils from "../../../utils/mathUtils";
 
-export default class PickupReach extends Module {
+export default class ItemReach extends Module {
     constructor () {
-        super("Pickup Reach", "Pick up items from 5 blocks away", "Misc", null, "");
+        super("Item Reach", "Pick up items from 5 blocks away", "Misc", null, "");
         this._getEntitiesInAABB;
     }
 
@@ -15,7 +15,7 @@ export default class PickupReach extends Module {
                 if (type == "autoRotate") {
                     let items = [];
                     let localPlayerPos = hooks.noa.ents.getPosition(hooks.noa.playerEntity);
-                    hooks.noa.ents._storage.itemState.forEach((item) => {
+                    hooks.noa.ents._storage.itemState.list.forEach((item) => {
                         let itemPos = [...hooks.noa.ents.getPositionData(item.__id).position];
                         if (parseFloat(mathUtils.distanceBetweenSqrt(localPlayerPos, itemPos)) <= 7) {
                             items.push(item.__id);

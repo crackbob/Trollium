@@ -17,13 +17,13 @@ export default class FastBreak extends Module {
                     this.originalHardness.set(block, block.ttb);
                 }
                 if (block.ttb < 500) {
-                    block.ttb /= 1.6;
+                    block.ttb /= 1.5;
                 }
                 if (block.ttb > 800) {
-                    block.ttb /= 1.4;
+                    block.ttb /= 1.3;
                 }
                 if (block.ttb < 800 && block.ttb > 500) {
-                    block.ttb /= 1.3;
+                    block.ttb /= 1.2;
                 }
             });
             this.applied = true;
