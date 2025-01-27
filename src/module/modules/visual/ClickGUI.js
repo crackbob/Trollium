@@ -34,7 +34,7 @@ export default class ClickGUI extends Module {
         if (!this.GUILoaded) {
 
             this.blurredBackground = document.createElement("div");
-            this.blurredBackground.style.backdropFilter = "blur(40px)";
+            this.blurredBackground.style.backdropFilter = "blur(15px)";
             this.blurredBackground.style.position = "absolute";
             this.blurredBackground.style.left = "0";
             this.blurredBackground.style.top = "0";
