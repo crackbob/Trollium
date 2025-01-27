@@ -1,0 +1,37 @@
+{
+	"name": "Trollium",
+	"version": "1.0.0",
+	"description": "Hacked client for Bloxd.io",
+	"main": "src/Trollium.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "webpack"
+	},
+	"repository": {
+		"type": "git",
+		"url": ""
+	},
+	"keywords": [
+		"bloxd.io",
+		"hack",
+		"client"
+	],
+	"author": "notchyves",
+	"license": "MIT",
+	"bugs": {
+		"url": ""
+	},
+	"homepage": "",
+	"dependencies": {
+		"esbuild-windows-64": "^0.15.18"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.26.0",
+		"@babel/preset-env": "^7.26.0",
+		"babel-loader": "^9.2.1",
+		"css-loader": "^7.1.2",
+		"style-loader": "^4.0.0",
+		"webpack": "^5.97.1",
+		"webpack-cli": "^6.0.1"
+	}
+}

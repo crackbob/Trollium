@@ -1,2 +1,2 @@
-# Trollium
-Utility Client for bloxd.io
+# Trollium Client
+Hacked client for Bloxd.io
