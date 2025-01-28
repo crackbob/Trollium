@@ -33,7 +33,7 @@ export default class Scaffold extends Module {
 
         if (!this.heldItem?.typeObj.id) return false;
         
-        hooks.wpRequire(532).Ob(88, {
+        hooks.sendPacket(52, {
             pos: blockPos,
             toBlock: this.heldItem.typeObj.id,
             checker: ""

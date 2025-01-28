@@ -9,7 +9,7 @@ export default class FastBreak extends Module {
     }
 
     onEnable () {
-        let blocks = Object.values(hooks.wpRequire(3224).r);
+        let blocks = Object.values(Object.values(hooks.findModule("Gun:class")).find(prop => typeof prop == "object"));
 
         if (!this.applied && blocks.length > 0) {
             blocks.forEach(block => {
@@ -31,7 +31,7 @@ export default class FastBreak extends Module {
     }
 
     onDisable () {
-        let blocks = Object.values(hooks.wpRequire(3224).r);
+        let blocks = Object.values(Object.values(hooks.findModule("Gun:class")).find(prop => typeof prop == "object"));
         blocks.forEach(block => {
             if (this.originalHardness.has(block)) {
                 block.ttb = this.originalHardness.get(block);

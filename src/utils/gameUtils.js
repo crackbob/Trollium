@@ -87,7 +87,7 @@ export default {
 
     selectInventorySlot(index) {
         hooks.noa.ents.getInventoryState(hooks.noa.playerEntity).inventory.setSelectedSlotIndex(index);
-        hooks.wpRequire(532).Ob(13, index);
+        hooks.sendPacket(40, index);
     },
 
     getPlayerName(id) {
