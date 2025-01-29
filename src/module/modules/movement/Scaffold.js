@@ -33,17 +33,7 @@ export default class Scaffold extends Module {
 
         if (!this.heldItem?.typeObj.id) return false;
         
-        hooks.sendPacket(52, {
-            pos: blockPos,
-            toBlock: this.heldItem.typeObj.id,
-            checker: ""
-        }, !0);
-
-        hooks.noa.bloxd.setBlock(...blockPos, this.heldItem.typeObj.id);
-
-        // remove the block you placed from your inventory
-        if (!hooks.noa.serverSettings.creative)
-            this.inventory.inventory.removeItem(this.inventory.inventory.items.findIndex(item => item == this.heldItem), 1);
+        gameUtils.placeBlock(blockPos, this.heldItem);
 
         return true;
     }

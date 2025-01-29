@@ -1,6 +1,7 @@
 import Module from "../../Module";
 import hooks from "../../../hooks";
 import moduleManager from "../../moduleManager";
+import gameUtils from "../../../utils/gameUtils";
 
 export default class HighJump extends Module {
     constructor () {
@@ -19,19 +20,11 @@ export default class HighJump extends Module {
         physicsBody.velocity[1] = 40;
 
         if (heldItem && heldItemIndex) {
-            hooks.noa.bloxd.setBlock(...blockPos, heldItem.typeObj.id);
 
-            // remove the block you placed from your inventory
-            inventory.inventory.removeItem(inventory.inventory.items.findIndex(item => item == heldItem), 1)
-
-            // hold a block
+            // hold a ladder
             gameUtils.selectInventorySlot(heldItemIndex);
 
-            hooks.wpRequire(503).Sb(53, {
-                pos: blockPos,
-                toBlock: heldItem.typeObj.id,
-                checker: ""
-            }, !0)
+            gameUtils.placeBlock(blockPos, heldItem);
         }
 
         setTimeout(() => {

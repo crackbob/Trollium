@@ -87,11 +87,27 @@ export default {
 
     selectInventorySlot(index) {
         hooks.noa.ents.getInventoryState(hooks.noa.playerEntity).inventory.setSelectedSlotIndex(index);
-        hooks.sendPacket(40, index);
+        hooks.sendPacket(29, index);
     },
 
     getPlayerName(id) {
         return hooks.noa.bloxd.entityNames[id].entityName;
+    },
+
+    placeBlock (blockPosition, heldItem) {                
+        hooks.sendPacket(114, {
+            pos: blockPosition,
+            toBlock: heldItem.typeObj.id,
+            checker: ""
+        }, !0);
+        
+        hooks.noa.bloxd.setBlock(...blockPosition, heldItem.typeObj.id);
+        
+        // remove the block you placed from your inventory
+        let inventory = hooks.noa.ents.getInventoryState(hooks.noa.playerEntity).inventory;
+        if (!hooks.noa.serverSettings.creative) {
+            inventory.removeItem(inventory.items.findIndex(item => item == heldItem), 1);
+        }
     },
 
     "lastKillauraAttack": 0
