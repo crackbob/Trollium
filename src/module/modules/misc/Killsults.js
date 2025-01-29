@@ -52,7 +52,7 @@ export default class Killsults extends Module {
             let insult = insults[Math.floor(Math.random() * insults.length)];
             let playerName = gameUtils.getPlayerName(data.deadEId);
             insult = insult.replace(":user:", playerName);
-            hooks.sendPacket(105, {
+            hooks.sendPacket(65, {
                 msg: insult,
                 channelName: null
             })
