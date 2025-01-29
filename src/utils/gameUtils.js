@@ -87,7 +87,7 @@ export default {
 
     selectInventorySlot(index) {
         hooks.noa.ents.getInventoryState(hooks.noa.playerEntity).inventory.setSelectedSlotIndex(index);
-        hooks.sendPacket(29, index);
+        hooks.sendPacket(3, index);
     },
 
     getPlayerName(id) {
@@ -95,7 +95,7 @@ export default {
     },
 
     placeBlock (blockPosition, heldItem) {                
-        hooks.sendPacket(114, {
+        hooks.sendPacket(62, {
             pos: blockPosition,
             toBlock: heldItem.typeObj.id,
             checker: ""

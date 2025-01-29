@@ -31,6 +31,7 @@ import UITweaks from "./modules/visual/UITweaks";
 import Derp from "./modules/misc/Derp";
 import ItemReach from "./modules/misc/ItemReach";
 import Jesus from "./modules/movement/Jesus";
+import MagicBullet from "./modules/combat/MagicBullet";
 
 export default {
     modules: {},
@@ -96,6 +97,7 @@ export default {
         this.addModule(new FastCrouch());
         this.addModule(new Derp());
         this.addModule(new Jesus());
+        this.addModule(new MagicBullet());
 
         let lastTickTime = 0;
         eventManager.on("gameTick", () => {
