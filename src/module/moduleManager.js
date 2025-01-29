@@ -30,6 +30,7 @@ import FastCrouch from "./modules/movement/FastCrouch";
 import UITweaks from "./modules/visual/UITweaks";
 import Derp from "./modules/misc/Derp";
 import ItemReach from "./modules/misc/ItemReach";
+import Jesus from "./modules/movement/Jesus";
 
 export default {
     modules: {},
@@ -94,6 +95,7 @@ export default {
         this.addModule(new ItemReach());
         this.addModule(new FastCrouch());
         this.addModule(new Derp());
+        this.addModule(new Jesus());
 
         let lastTickTime = 0;
         eventManager.on("gameTick", () => {
