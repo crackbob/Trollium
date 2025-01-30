@@ -29,6 +29,10 @@ export default class MagicBullet extends Module {
 
     onGameTick () {
         this.targetPlayer = gameUtils.getClosestAttackablePlayer();
+
+        if (this.heldItem.fireBullet == this.heldItem.__proto__.fireBullet) {
+            this.onEnable();
+        }
     }
 
     onDisable () {

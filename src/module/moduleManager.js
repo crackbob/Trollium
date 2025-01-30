@@ -32,6 +32,7 @@ import Derp from "./modules/misc/Derp";
 import ItemReach from "./modules/misc/ItemReach";
 import Jesus from "./modules/movement/Jesus";
 import MagicBullet from "./modules/combat/MagicBullet";
+import BedAura from "./modules/misc/BedAura";
 
 export default {
     modules: {},
@@ -98,6 +99,7 @@ export default {
         this.addModule(new Derp());
         this.addModule(new Jesus());
         this.addModule(new MagicBullet());
+        this.addModule(new BedAura());
 
         let lastTickTime = 0;
         eventManager.on("gameTick", () => {
