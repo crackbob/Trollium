@@ -53,7 +53,7 @@ export default {
 
                 configManager.config.modules[name].keybind = key;
                 
-            } else if (module.keybind === key) {
+            } else if (module.keybind == key) {
                 module.toggle();
             }
         }

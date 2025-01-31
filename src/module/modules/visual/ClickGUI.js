@@ -5,7 +5,10 @@ import eventManager from "../../../events/manager";
 
 export default class ClickGUI extends Module {
     constructor() {
-        super("ClickGUI", "Mod menu of the client.", "Visual", null);
+        super("ClickGUI", "Mod menu of the client.", "Visual", {
+            "Accent Color 1": "rgb(64, 190, 255)",
+            "Accent Color 2": "rgb(129, 225, 255)"
+        });
 
         this.GUILoaded = false;
         this.panels = [];
@@ -14,11 +17,7 @@ export default class ClickGUI extends Module {
         this.accentColor = "var(--trollium-accent-color)";
         this.secondAccentColor = "aqua"; 
         this.hoverColor = "rgb(50, 50, 50, 0.9)";
-
-        this.options = {
-            "Accent Color 1": "rgb(64, 190, 255)",
-            "Accent Color 2": "rgb(129, 225, 255)"
-        }
+        document.body.style.setProperty('--trollium-accent-color', `linear-gradient(90deg, ${this.options["Accent Color 1"]} 0%, ${this.options["Accent Color 2"]} 100%)`)
 
         var link = document.createElement('link');
         link.setAttribute('rel', 'stylesheet');
@@ -142,6 +141,11 @@ export default class ClickGUI extends Module {
             buttonContainer.style.backgroundColor = "rgb(10, 10, 10, 0.85)";
             buttonContainer.style.display = "flex";
             buttonContainer.style.flexDirection = "column";
+
+            if (!ConfigManager.config.modules?.[module.name]) {
+                ConfigManager.config.modules[module.name] = {};
+                ConfigManager.update();
+            }
     
             const btn = document.createElement("div");
             btn.className = "button";
@@ -238,7 +242,15 @@ export default class ClickGUI extends Module {
                     checkbox.style.background = wasChecked ? buttonColor : accentColor;
                     eventManager.emit("trollium.setting.update", module)
                     module.options[name] = !wasChecked;
+
+                    if (!ConfigManager.config.modules?.[module.name]?.options) {
+                        ConfigManager.config.modules[module.name].options = {};
+                    }
+                    ConfigManager.config.modules[module.name].options[name] = !wasChecked;
+                    ConfigManager.update();
                 });
+
+                checkbox.style.background = module.options[name] ? buttonColor : accentColor;
         
                 checkboxContainer.appendChild(checkboxLabel);
                 checkboxContainer.appendChild(checkbox);
@@ -279,6 +291,11 @@ export default class ClickGUI extends Module {
                     colorPickerBg.style.background = event.target.value;
                     eventManager.emit("trollium.setting.update", module)
                     module.options[name] = event.target.value;
+                    if (!ConfigManager.config.modules?.[module.name]?.options) {
+                        ConfigManager.config.modules[module.name].options = {}
+                    }
+                    ConfigManager.config.modules[module.name].options[name] = event.target.value;
+                    ConfigManager.update();
                 });
         
                 colorPickerContainer.appendChild(colorPickerLabel);

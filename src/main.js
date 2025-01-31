@@ -12,7 +12,6 @@ class Trollium {
     }
 
     init () {
-        document.body.style.setProperty('--trollium-accent-color', `linear-gradient(90deg, rgb(64, 190, 255) 0%, rgb(129, 225, 255) 100%)`);
             
         setInterval(() => {
             EventManager.emit("trollium.render");

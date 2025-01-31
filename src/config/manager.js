@@ -7,17 +7,5 @@ export default {
     }`),
     update() {
         localStorage["trollium-config"] = JSON.stringify(this.config);
-    },
-    export () {
-        const blob = new Blob([JSON.stringify(this.config)], { type: 'application/json' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = "config.json";
-        link.click();
-        URL.revokeObjectURL(link.href);
-    },
-    import (str) {
-        this.config = JSON.parse(str);
-        this.update();
     }
 }

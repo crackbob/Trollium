@@ -4,11 +4,10 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class Scaffold extends Module {
     constructor () {
-        super("Scaffold", "Places blocks under you while walking or running.", "Movement", null, "KeyC")
-        this.yPosOnEnable = 0;
-        this.options = {
+        super("Scaffold", "Places blocks under you while walking or running.", "Movement", {
             "Y Lock": false
-        }
+        }, "KeyC")
+        this.yPosOnEnable = 0;
     }
 
     get inventory () {
@@ -39,6 +38,7 @@ export default class Scaffold extends Module {
     }
 
     onEnable() {
+        if (!gameUtils.inGame) return;
         let physicsBody = hooks.noa.entities.getPhysicsBody(hooks.noa.playerEntity);
         gameUtils.freezeValue(physicsBody, "preventFallOffEdge", true);
 

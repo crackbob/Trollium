@@ -6,7 +6,7 @@ export default class Module {
         this.name = name;
         this.description = description;
         this.category = category;
-        this.options = options || {};
+        this.options = configManager.config?.modules?.[name]?.options || options;
         this.keybind = configManager.config?.modules?.[name]?.keybind || keybind;
         if (name == "ClickGUI" && !configManager.config?.modules?.[name]?.keybind) {
             this.keybind = "ShiftRight"

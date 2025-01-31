@@ -94,24 +94,15 @@ export default class ArrayList extends Module {
 
             this.initialized = true;
         } else {
-            this.arraylistContainer.style.display = "flex";
+            this.arraylistContainer.style.opacity = "1";
         }
     }
 
     measureElementWidth(element) {
-        const tempContainer = document.createElement("div");
-        tempContainer.style.visibility = "hidden";
-        tempContainer.style.position = "absolute";
-        tempContainer.appendChild(element);
-        document.body.appendChild(tempContainer);
-
-        const width = element.getBoundingClientRect().width;
-
-        document.body.removeChild(tempContainer);
-        return width;
+        return element.getBoundingClientRect().width;
     }
 
     onDisable() {
-        this.arraylistContainer.style.display = "none";
+        this.arraylistContainer.style.opacity = "0";
     }
 }

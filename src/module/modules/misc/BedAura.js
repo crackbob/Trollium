@@ -24,8 +24,7 @@ export default class BedAura extends Module {
         const blockPos = playerPos.map(Math.floor);
         const heldItem = hooks.noa.ents.getHeldItem(hooks.noa.playerEntity);
 
-        const blocks = Object.values(Object.values(hooks.findModule("Gun:class"))
-            .find(prop => typeof prop === "object"));
+        const blocks = Object.values(Object.values(hooks.findModule("Gun:class")).find(prop => typeof prop === "object"));
 
         if (this.spoofedTargetBlock.spoofed) {
             if (!blocks[this.spoofedTargetBlock.blockID] || !hooks.noa.bloxd.getBlock(this.spoofedTargetBlock.position[0], this.spoofedTargetBlock.position[1], this.spoofedTargetBlock.position[2])) {
