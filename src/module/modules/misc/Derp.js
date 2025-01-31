@@ -17,6 +17,7 @@ export default class Derp extends Module {
         if (!gameUtils.inGame) return;
 
         this.realHeading = hooks.noa.camera.heading;
+        this.realPitch = hooks.noa.camera.pitch;
         hooks.noa.camera.__defineGetter__("heading", () => {
             try {
                 null.test();
@@ -52,7 +53,7 @@ export default class Derp extends Module {
     }
 
     onGameTick() {
-        this.spinIndex += 0.3 % 180;
+        this.spinIndex += 0.1 % 360;
         this.fakePitch = this.spinIndex;
         this.fakeHeading = this.spinIndex;
     }
@@ -67,5 +68,9 @@ export default class Derp extends Module {
         hooks.noa.entities._storage.playerMesh.list[0].namedNodes.HeadMesh.rotation.__defineSetter__("_x", () => this.realPitch)
         hooks.noa.entities._storage.playerMesh.list[0].rootMesh.rotation.__defineGetter__("_y", () => this.realHeading)
         hooks.noa.entities._storage.playerMesh.list[0].rootMesh.rotation.__defineSetter__("_y", () => this.realHeading)
+    }
+
+    onEnterWorld() {
+        this.onEnable();
     }
 };

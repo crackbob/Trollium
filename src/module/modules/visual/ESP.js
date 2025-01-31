@@ -10,10 +10,10 @@ export default class ESP extends Module {
 
     ESPMatList = []
 
-    onEnable () {
+    onGameTick () {
         gameUtils.getPlayerList().forEach((playerID) => {
             if (!this.ESPMatList[playerID]) {
-                let ESPMesh = hooks.wpRequire(3010).g.CreatePlane(`${playerID.toString()}-ESP`, {
+                let ESPMesh = hooks.wpRequire(3184).e.CreatePlane(`${playerID.toString()}-ESP`, {
                     height: 1.8,
                     width: 1
                 }, hooks.noa.rendering.getScene());
@@ -25,7 +25,7 @@ export default class ESP extends Module {
                 ESPMesh.renderingGroupId = 1;
                 ESPMesh._absolutePosition._y += 3
                 
-                let materialCreator = hooks.wpRequire(1318).b;
+                let materialCreator = hooks.wpRequire(1272).d;
                 
                 const material = new materialCreator(`${playerID.toString()}-ESPMat`, hooks.noa.rendering.getScene());
                 material.specularColor = { r: 255, g: 0, b: 0 };
