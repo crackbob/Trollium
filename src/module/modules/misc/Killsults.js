@@ -49,6 +49,7 @@ export default class Killsults extends Module {
 
         this.listener = hooks.bloxdEvents.subscribe("playerKilled", function(data) {
             if (data.killerEId !== hooks.noa.serverPlayerEntity) return;
+            if (data.deadEId === hooks.noa.serverPlayerEntity) return;
             let insult = insults[Math.floor(Math.random() * insults.length)];
             let playerName = gameUtils.getPlayerName(data.deadEId);
             insult = insult.replace(":user:", playerName);
