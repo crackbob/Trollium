@@ -1,81 +1,74 @@
 import Module from "../../Module";
 import hooks from "../../../hooks";
-
 export default class BedAura extends Module {
     constructor () {
         super("BedAura", "Break beds automatically", "Misc")
-        this.blocks = null;
+        this.lastPosition = [0, 0, 0];
+        this.spoofedTargetBlock = {
+            position: {},
+            id: 0,
+            spoofed: true,
+            adjacent: [],
+            normal: [0, 0, 0]
+        };
+    }
+
+    hasMovedSignificantly(currentPos) {
+        return this.lastPosition.some((coord, i) => 
+            Math.abs(coord - currentPos[i]) >= 0.5
+        );
     }
 
     onGameTick () {
-        if (!this.blocks) {
-            this.blocks = Object.values(Object.values(hooks.findModule("Gun:class"))
-                .find(prop => typeof prop == "object"));
-        }
+        const playerPos = hooks.noa.ents.getPositionData(hooks.noa.playerEntity).position;
+        const blockPos = playerPos.map(Math.floor);
+        const heldItem = hooks.noa.ents.getHeldItem(hooks.noa.playerEntity);
 
-        let heldItem = hooks.noa.ents.getHeldItem(hooks.noa.playerEntity);
-        let playerPos = hooks.noa.ents.getPositionData(hooks.noa.playerEntity).position;
-        let blockPos = playerPos.map(Math.floor);
+        const blocks = Object.values(Object.values(hooks.findModule("Gun:class"))
+            .find(prop => typeof prop === "object"));
 
-        const spoofedTargetBlock = {
-            position: {},
-            adjacent: {},
-            normal: {},
-            blockID: 0,
-            spoofed: true
-        }
-
-        const maxRadius = 5;
-        let found = this.search(blockPos, maxRadius, spoofedTargetBlock);
-
-        if (found) {
-            hooks.noa.__defineGetter__("targetedBlock", () => spoofedTargetBlock);
-            hooks.noa.__defineSetter__("targetedBlock", () => spoofedTargetBlock);
-            heldItem.breaking = true;
-        } else {
-            if (hooks.noa?.targetedBlock?.spoofed) {
+        if (this.spoofedTargetBlock.spoofed) {
+            if (!blocks[this.spoofedTargetBlock.blockID] || !hooks.noa.bloxd.getBlock(this.spoofedTargetBlock.position[0], this.spoofedTargetBlock.position[1], this.spoofedTargetBlock.position[2])) {
                 delete hooks.noa.targetedBlock;
                 heldItem.breaking = false;
+                this.spoofedTargetBlock.spoofed = false;
+                return;
             }
         }
-    }
 
-    search(blockPos, maxRadius, spoofedTargetBlock) {
-        for (let r = 1; r <= maxRadius; r++) {
-            for (let y = -r; y <= r; y++) {
-                for (let x = -r; x <= r; x++) {
-                    for (let z = -r; z <= r; z++) {
-                        if (Math.max(Math.abs(x), Math.abs(y), Math.abs(z)) != r) continue;
+        if (!this.hasMovedSignificantly(playerPos)) {
+            return;
+        }
 
-                        let currentBlock = hooks.noa.bloxd.getBlock(
-                            blockPos[0] + x,
-                            blockPos[1] + y,
-                            blockPos[2] + z
-                        );
-                        
-                        if (this.blocks[currentBlock]?.name.toLowerCase().includes("bed")) {
-                            spoofedTargetBlock.position = [
-                                blockPos[0] + x,
-                                blockPos[1] + y,
-                                blockPos[2] + z
-                            ];
-                            spoofedTargetBlock.adjacent = [
-                                blockPos[0] + x,
-                                blockPos[1] + y + 1,
-                                blockPos[2] + z
-                            ];
-                            spoofedTargetBlock.normal = [
-                                0,
-                                0,
-                                0
-                            ]
-                            spoofedTargetBlock.blockID = this.blocks[currentBlock].id;
-                            return true;
-                        }
+        this.lastPosition = [...playerPos];
+
+        let blockFound = false;
+
+        searchLoop: for (let x = -5; x <= 5; x++) {
+            for (let y = -5; y <= 5; y++) {
+                for (let z = -5; z <= 5; z++) {
+                    const [cx, cy, cz] = [blockPos[0] + x, blockPos[1] + y, blockPos[2] + z];
+                    const currentBlock = hooks.noa.bloxd.getBlock(cx, cy, cz);
+                    
+                    if (blocks[currentBlock]?.name.toLowerCase().includes("bed")) {
+                        this.spoofedTargetBlock.position = [cx, cy, cz];
+                        this.spoofedTargetBlock.adjacent = [cx, cy + 1, cz];
+                        this.spoofedTargetBlock.blockID = blocks[currentBlock].id;
+                        this.spoofedTargetBlock.spoofed = true;
+                        blockFound = true;
+                        break searchLoop;
                     }
                 }
             }
         }
-        return false;
+
+        if (blockFound) {
+            Object.defineProperty(hooks.noa, 'targetedBlock', {
+                get: () => this.spoofedTargetBlock,
+                set: () => this.spoofedTargetBlock,
+                configurable: true
+            });
+            heldItem.breaking = true;
+        }
     }
 };
