@@ -34,6 +34,7 @@ import Jesus from "./modules/movement/Jesus";
 import MagicBullet from "./modules/combat/MagicBullet";
 import BedAura from "./modules/misc/BedAura";
 import Freeze from "./modules/movement/Freeze";
+import Fill from "./modules/misc/Fill";
 
 export default {
     modules: {},
@@ -102,6 +103,7 @@ export default {
         this.addModule(new MagicBullet());
         this.addModule(new BedAura());
         this.addModule(new Freeze());
+        this.addModule(new Fill());
 
         let lastTickTime = 0;
         eventManager.on("gameTick", () => {
