@@ -33,6 +33,7 @@ import ItemReach from "./modules/misc/ItemReach";
 import Jesus from "./modules/movement/Jesus";
 import MagicBullet from "./modules/combat/MagicBullet";
 import BedAura from "./modules/misc/BedAura";
+import Freeze from "./modules/movement/Freeze";
 
 export default {
     modules: {},
@@ -100,6 +101,7 @@ export default {
         this.addModule(new Jesus());
         this.addModule(new MagicBullet());
         this.addModule(new BedAura());
+        this.addModule(new Freeze());
 
         let lastTickTime = 0;
         eventManager.on("gameTick", () => {
