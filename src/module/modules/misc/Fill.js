@@ -7,15 +7,17 @@ export default class Fill extends Module {
         super("Fill", "Fill Blocks", "Misc", null, "");
         this.delay = 300;
         this.index = 0;
-        this.radius = 3;
+        this.radius = 5;
         this.blockPositions = [];
     }
 
     onEnable () {
         if (hooks.noa.serverSettings.creative) {
-            this.delay = 10;    
+            this.delay = 10;
+            this.radius = 5;
         } else {
             this.delay = 300;
+            this.radius = 3;
         }
     }
 

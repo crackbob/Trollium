@@ -35,6 +35,7 @@ import MagicBullet from "./modules/combat/MagicBullet";
 import BedAura from "./modules/misc/BedAura";
 import Freeze from "./modules/movement/Freeze";
 import Fill from "./modules/misc/Fill";
+import AntiSpike from "./modules/movement/AntiSpike";
 
 export default {
     modules: {},
@@ -104,6 +105,7 @@ export default {
         this.addModule(new BedAura());
         this.addModule(new Freeze());
         this.addModule(new Fill());
+        this.addModule(new AntiSpike());
 
         let lastTickTime = 0;
         eventManager.on("gameTick", () => {

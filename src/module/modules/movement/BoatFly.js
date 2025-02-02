@@ -13,7 +13,7 @@ export default class BoatFly extends Module {
     onGameTick () {
         let delay = 800;
         this.getBoatSpeed = this.getBoatSpeed || Object.values(hooks.findModule("getVehicleMoveSpeedMult:"))[0][1].getVehicleMoveSpeedMult;
-        Object.values(hooks.findModule("getVehicleMoveSpeedMult:"))[0][1].getVehicleMoveSpeedMult = () => 10
+        Object.values(hooks.findModule("getVehicleMoveSpeedMult:"))[0][1].getVehicleMoveSpeedMult = () => 10;
         let targetYVel = 3;
 
         let currentTime = Date.now();
