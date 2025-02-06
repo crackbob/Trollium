@@ -5,11 +5,15 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class Killaura extends Module {
     constructor () {
-        super("Killaura", "Targets and kills players within 10 block radius.", "Combat", null, "KeyK")
+        super("Killaura", "Targets and kills players within 10 block radius.", "Combat", {
+            "Criticals": false
+        }, "KeyK")
     }
 
     onGameTick () {
-        const localPlayerPos = hooks.noa.ents.getPosition(hooks.noa.playerEntity);
+
+        let physicsBody = hooks.noa.entities.getPhysicsBody(hooks.noa.playerEntity);
+        let localPlayerPos = hooks.noa.ents.getPosition(hooks.noa.playerEntity);
         let inventory = hooks.noa.ents.getInventoryState(hooks.noa.playerEntity).inventory.items;
         let playerList = gameUtils.getPlayerList();
         playerList.forEach(function (player) {
@@ -43,5 +47,9 @@ export default class Killaura extends Module {
                 gameUtils.lastKillauraAttack = Date.now();
             }
         })
+
+        if (this.options["Criticals"] && physicsBody.atRestY() < 0) {
+            physicsBody.velocity[1] = 0.5;
+        }
     }
 };
