@@ -15,7 +15,7 @@ class Trollium {
             
         setInterval(() => {
             EventManager.emit("trollium.render");
-            if (document.querySelector(".ErrorPopupTitleBody") && document.querySelector(".ErrorPopupTitleBody").textContent.includes("banned you") && !document.querySelector(".ErrorPopupTitleBody").innerHTML.includes("Click to be unbanned.")) {
+            if (document.querySelector(".ErrorPopupTitleBody") && document.querySelector(".ErrorPopupTitleBody").textContent.includes("banned") && !document.querySelector(".ErrorPopupTitleBody").innerHTML.includes("Click to be unbanned.")) {
                 var h1 = document.createElement("h1");
                 h1.textContent = "Click to be unbanned.";
         

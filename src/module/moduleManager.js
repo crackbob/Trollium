@@ -9,7 +9,7 @@ import ViewModel from "./modules/visual/viewModel";
 import Wireframe from "./modules/visual/Wireframe";
 import Watermark from "./modules/visual/Watermark";
 import AutoSprint from "./modules/movement/autoSprint";
-import Bhop from "./modules/movement/bhop";
+import Speed from "./modules/movement/Speed";
 import BoatFly from "./modules/movement/boatFly";
 import FireballFly from "./modules/movement/FireballFly";
 import HighJump from "./modules/movement/highJump";
@@ -80,7 +80,7 @@ export default {
         this.addModule(new Watermark());
         this.addModule(new Wireframe());
         this.addModule(new AutoSprint());
-        this.addModule(new Bhop());
+        this.addModule(new Speed());
         this.addModule(new BoatFly());
         this.addModule(new FireballFly());
         this.addModule(new HighJump());
