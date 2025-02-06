@@ -22,9 +22,6 @@
 		"url": ""
 	},
 	"homepage": "",
-	"dependencies": {
-		"esbuild-windows-64": "^0.15.18"
-	},
 	"devDependencies": {
 		"@babel/core": "^7.26.0",
 		"@babel/preset-env": "^7.26.0",
