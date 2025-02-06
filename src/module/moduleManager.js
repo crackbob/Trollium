@@ -65,15 +65,6 @@ export default {
         }
     },
 
-    get (name) {
-        for (let i = 0; i < this.modules.length; i++) {
-            if (this.modules[i].name === name) {
-                return this.modules[i];
-            }
-        }
-        return null;
-    },
-
     init () {
         this.addModules([
             new ArrayList(),
@@ -158,5 +149,9 @@ export default {
                 }
             }
         });
+
+        
+        this.modules["Arraylist"].enable();
+        this.modules["Watermark"].enable();
     }
 };

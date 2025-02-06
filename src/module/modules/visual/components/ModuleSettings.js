@@ -10,7 +10,7 @@ export default class ModuleSettings {
     }
 
     initialize() {
-        if (this.initialized) return;
+        if (this.initialized || !this.module?.options) return;
         
         Object.keys(this.module.options).forEach(key => {
             const settingValue = this.module.options[key];
@@ -18,9 +18,9 @@ export default class ModuleSettings {
 
             if (key.toLowerCase().includes("color")) {
                 this.addColorPicker(key);
-            } else if (settingType === "boolean") {
+            } else if (settingType === "boolean" || settingValue === "true" || settingValue === "false") {
                 this.addCheckbox(key);
-            } else if (settingType === "string" && !isNaN(settingValue)) {
+            } else {
                 this.addNumberInput(key);
             }
         });
@@ -33,6 +33,11 @@ export default class ModuleSettings {
         this.isOpen = !this.isOpen;
         this.components.forEach(component => {
             component.style.display = this.isOpen ? "flex" : "none";
+            if (this.isOpen) {
+                this.container.style.marginBottom = "5px";
+            } else {
+                this.container.style.marginBottom = "0px";
+            }
         });
     }
 
@@ -88,12 +93,12 @@ export default class ModuleSettings {
 
         const checkbox = document.createElement("div");
         checkbox.className = "gui-checkbox";
-        checkbox.classList.toggle("enabled", this.module.options[name]);
+        checkbox.classList.toggle("enabled", this.module.options[name] === true || this.module.options[name] === "true");
 
         checkbox.addEventListener("click", () => {
             const wasChecked = checkbox.classList.contains("enabled");
             checkbox.classList.toggle("enabled");
-            this.module.options[name] = !wasChecked;
+            this.module.options[name] = (!wasChecked).toString();
             eventManager.emit("trollium.setting.update", this.module);
         });
 

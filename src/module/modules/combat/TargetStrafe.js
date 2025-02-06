@@ -4,9 +4,10 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class TargetStrafe extends Module {
     constructor() {
-        super("Target Strafe", "Allows you to strafe around the target while attacking player.", "Combat", null, "");
+        super("Target Strafe", "Allows you to strafe around the target while attacking player.", "Combat", {
+            "Radius": 1.5
+        }, "");
         this.angle = 0;
-        this.radius = 1.5;
     }
 
     onGameTick() {
@@ -24,8 +25,8 @@ export default class TargetStrafe extends Module {
                 this.angle += 0.1;
             }
 
-            const newX = target[0] + Math.cos(this.angle) * this.radius;
-            const newZ = target[2] + Math.sin(this.angle) * this.radius;
+            const newX = target[0] + Math.cos(this.angle) * this.options.Radius;
+            const newZ = target[2] + Math.sin(this.angle) * this.options.Radius;
 
             const speed = hooks.noa.serverSettings.walkingSpeed / 2;
 

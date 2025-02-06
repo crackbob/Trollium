@@ -129,12 +129,12 @@
     color: var(--text-color);
     font-family: 'Product Sans', sans-serif;
     font-size: var(--setting-text-size);
-    padding: 2px 5px;
     width: 40px;
     border-radius: 4px;
     outline: none;
     transition: background 0.3s;
     text-align: center;
+    margin: 5px;
     margin-right: 10px;
 }
 

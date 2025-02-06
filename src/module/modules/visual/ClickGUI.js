@@ -12,11 +12,8 @@ export default class ClickGUI extends Module {
             "Button Color": "rgb(40, 40, 40, 0.9)",
             "Hover Color": "rgb(50, 50, 50, 0.9)",
             "Header Color": "rgb(0, 0, 0, 0.85)",
-            "Panel Color": "rgb(34, 34, 34, 0.85)",
-            "Text Color": "#ffffff",
-            "Header Text Size": "25",
-            "Button Text Size": "20",
-            "Setting Text Size": "15"
+            "Panel Color": "rgb(18 18 18)",
+            "Text Color": "#ffffff"
         }, "ShiftRight");
 
         this.GUILoaded = false;
@@ -33,9 +30,6 @@ export default class ClickGUI extends Module {
         document.body.style.setProperty('--header-bg', this.options["Header Color"]);
         document.body.style.setProperty('--panel-bg', this.options["Panel Color"]);
         document.body.style.setProperty('--text-color', this.options["Text Color"]);
-        document.body.style.setProperty('--header-text-size', this.options["Header Text Size"] + "px");
-        document.body.style.setProperty('--button-text-size', this.options["Button Text Size"] + "px");
-        document.body.style.setProperty('--setting-text-size', this.options["Setting Text Size"] + "px");
     }
 
     onEnable() {
@@ -65,14 +59,32 @@ export default class ClickGUI extends Module {
             { title: "Misc", position: { top: "100px", left: "760px" } }
         ];
 
+        this.panels.forEach(panel => {
+            if (panel.panel && panel.panel.parentNode) {
+                panel.panel.parentNode.removeChild(panel.panel);
+            }
+        });
+        this.panels = [];
+
         panelConfigs.forEach(config => {
             const panel = new Panel(config.title, config.position);
             this.panels.push(panel);
         });
 
+        const modulesByCategory = {};
         Object.values(moduleManager.modules).forEach(module => {
-            const panel = this.panels.find(p => p.header.textContent === module.category);
-            if (panel) panel.addButton(module);
+            if (!modulesByCategory[module.category]) {
+                modulesByCategory[module.category] = [];
+            }
+            modulesByCategory[module.category].push(module);
+        });
+
+        Object.entries(modulesByCategory).forEach(([category, modules]) => {
+            const panel = this.panels.find(p => p.header.textContent === category);
+            if (!panel) return;
+
+            modules.sort((a, b) => b.name.length - a.name.length);
+            modules.forEach(module => panel.addButton(module));
         });
     }
 

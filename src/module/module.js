@@ -21,27 +21,23 @@ export default class Module {
     onExitWorld() {}
     onSettingUpdate() {}
 
+    enable () {
+        this.isEnabled = true;
+        eventListener.emit("trollium.module.update", this);
+        this.onEnable();
+    }
+
+    disable () {
+        this.isEnabled = false;
+        eventListener.emit("trollium.module.update", this);
+        this.onDisable();
+    }
+
     toggle () {
-        this.isEnabled = !this.isEnabled;
-        var names = document.querySelectorAll(".trollium-mod-name");
-        names.forEach((name2) => {
-            if (name2.textContent.toLowerCase() === this.name.toLowerCase()) {
-                if (this.isEnabled) {
-                    name2.classList.add("selected");
-                } else {
-                    name2.classList.remove("selected");
-                }
-            }
-        });
-
-        eventListener.emit("trollium.module.update", this)
-    
-        configManager.update();
-
         if (this.isEnabled) {
-            this.onEnable();
+            this.disable();
         } else {
-            this.onDisable();
+            this.enable();
         }
     };
 };
