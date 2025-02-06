@@ -1,23 +1,23 @@
 import Module from "../../module";
 import hooks from "../../../hooks";
 import mathUtils from "../../../utils/mathUtils";
+import packets from "../../../utils/packets";
 
 export default class Fill extends Module {
     constructor () {
-        super("Fill", "Fill Blocks", "Misc", null, "");
+        super("Fill", "Fill Blocks", "Misc", {
+            "Radius": 3
+        }, "");
         this.delay = 300;
         this.index = 0;
-        this.radius = 5;
         this.blockPositions = [];
     }
 
     onEnable () {
         if (hooks.noa.serverSettings.creative) {
             this.delay = 10;
-            this.radius = 5;
         } else {
             this.delay = 300;
-            this.radius = 3;
         }
     }
 
@@ -26,14 +26,16 @@ export default class Fill extends Module {
         let blockPos = playerPos.map(Math.floor);
         let heldItem = hooks.noa.ents.getHeldItem(hooks.noa.playerEntity);
 
-        blockPos[1] -= (this.radius + 1);
+        blockPos[1] -= (this.options.Radius + 1);
+
+        let radius = parseInt(this.options.Radius);
 
         if (!heldItem?.typeObj) return;
 
         this.blockPositions = [];
-        for (let x = -this.radius; x <= this.radius; x++) {
-            for (let y = -this.radius; y <= this.radius; y++) {
-                for (let z = -this.radius; z <= this.radius; z++) {
+        for (let x = -radius; x <= radius; x++) {
+            for (let y = -radius; y <= radius; y++) {
+                for (let z = -radius; z <= radius; z++) {
                     const [cx, cy, cz] = [blockPos[0] + x, blockPos[1] + y, blockPos[2] + z];
                     const currentBlock = hooks.noa.bloxd.getBlock(cx, cy, cz);
                     if (!hooks.noa.registry.getBlockSolidity(currentBlock)) {

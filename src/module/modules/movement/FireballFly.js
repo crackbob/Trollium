@@ -2,10 +2,11 @@ import Module from "../../module";
 import hooks from "../../../hooks";
 import gameUtils from "../../../utils/gameUtils";
 
-window.flySpeed = 100;
 export default class FireballFly extends Module {
     constructor () {
-        super("Fireball Fly", "Fly with fireballs.", "Movement", null, "KeyV")
+        super("Fireball Fly", "Fly with fireballs.", "Movement", {
+            "Fly Speed": 100
+        }, "KeyV")
     }
 
     getBoatSpeed = null;
@@ -21,8 +22,8 @@ export default class FireballFly extends Module {
             hooks.noa.ents.getHeldItem(hooks.noa.playerEntity).secondaryDownFireRepeatableAction();
         }
 
-        hooks.noa.serverSettings.walkingSpeed = flySpeed;
-        hooks.noa.serverSettings.runningSpeed = flySpeed;
+        hooks.noa.serverSettings.walkingSpeed = parseFloat(this.options["Fly Speed"]);
+        hooks.noa.serverSettings.runningSpeed = parseFloat(this.options["Fly Speed"]);
     }
 
     onGameTick () {

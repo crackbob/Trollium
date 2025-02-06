@@ -7,12 +7,10 @@ export default class Freeze extends Module {
     }
 
     onEnable () {
-        
         hooks.noa.ents.getPhysicsBody(hooks.noa.playerEntity).mass = 0;
     }
 
     onDisable () {
-        
         hooks.noa.ents.getPhysicsBody(hooks.noa.playerEntity).mass = 1;
     }
 

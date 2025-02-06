@@ -5,7 +5,9 @@ import gameUtils from "../../../utils/gameUtils";
 let packets = [];
 export default class Derp extends Module {
     constructor () {
-        super("Derp", "Spin around like crazy.", "Misc")
+        super("Derp", "Spin around like crazy.", "Misc", {
+            "Speed": 1
+        })
         this.realHeading = 0;
         this.fakeHeading = 0;
         this.realPitch = 0;
@@ -53,7 +55,7 @@ export default class Derp extends Module {
     }
 
     onGameTick() {
-        this.spinIndex += 0.1 % 360;
+        this.spinIndex += (this.options.Speed / 10) % 360;
         this.fakePitch = this.spinIndex;
         this.fakeHeading = this.spinIndex;
     }
