@@ -1,4 +1,4 @@
-import Module from "../../Module";
+import Module from "../../module";
 import hooks from "../../../hooks";
 import mathUtils from "../../../utils/mathUtils";
 import gameUtils from "../../../utils/gameUtils";

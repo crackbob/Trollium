@@ -5,14 +5,14 @@ import gameUtils from "../utils/gameUtils";
 import configManager from "../config/manager";
 
 import ESP from "./modules/visual/ESP";
-import ViewModel from "./modules/visual/viewModel";
+import ViewModel from "./modules/visual/ViewModel";
 import Wireframe from "./modules/visual/Wireframe";
 import Watermark from "./modules/visual/Watermark";
-import AutoSprint from "./modules/movement/autoSprint";
+import AutoSprint from "./modules/movement/AutoSprint";
 import Bhop from "./modules/movement/Bhop";
-import BoatFly from "./modules/movement/boatFly";
+import BoatFly from "./modules/movement/BoatFly";
 import FireballFly from "./modules/movement/FireballFly";
-import HighJump from "./modules/movement/highJump";
+import HighJump from "./modules/movement/HighJump";
 import NoClip from "./modules/movement/NoClip";
 import SafeWalk from "./modules/movement/Safewalk";
 import Scaffold from "./modules/movement/Scaffold";

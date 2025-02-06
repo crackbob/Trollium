@@ -1,7 +1,7 @@
 import hooks from "../../../hooks";
 import mathUtils from "../../../utils/mathUtils";
 import gameUtils from "../../../utils/gameUtils";
-import Module from "../../Module";
+import Module from "../../module";
 
 export default class ESP extends Module {
     constructor () {

@@ -1,4 +1,4 @@
-import Module from "../../Module";
+import Module from "../../module";
 import moduleManager from "../../moduleManager";
 import eventManager from "../../../events/manager"
 

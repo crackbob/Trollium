@@ -1,4 +1,4 @@
-import Module from "../../Module";
+import Module from "../../module";
 
 export default class Watermark extends Module {
     constructor () {

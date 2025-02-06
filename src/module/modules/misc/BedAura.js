@@ -1,4 +1,4 @@
-import Module from "../../Module";
+import Module from "../../module";
 import hooks from "../../../hooks";
 export default class BedAura extends Module {
     constructor () {

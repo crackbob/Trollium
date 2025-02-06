@@ -1,5 +1,5 @@
 import hooks from "../../../hooks";
-import Module from "../../Module";
+import Module from "../../module";
 
 export default class ViewModel extends Module {
     constructor () {

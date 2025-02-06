@@ -1,4 +1,4 @@
-import Module from "../../Module.js";
+import Module from "../../module.js";
 import moduleManager from "../../moduleManager.js";
 import ConfigManager from "../../../config/manager.js";
 import eventManager from "../../../events/manager";

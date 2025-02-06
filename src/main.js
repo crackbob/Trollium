@@ -1,5 +1,5 @@
 import configManager from "./config/manager";
-import moduleManager from "./Module/moduleManager";
+import moduleManager from "./module/moduleManager";
 import EventManager from "./events/manager";
 import gameUtils from './utils/gameUtils';
 import hooks from "./hooks"
