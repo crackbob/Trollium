@@ -8,7 +8,7 @@ export default class ClickGUI extends Module {
         super("ClickGUI", "Mod menu of the client.", "Visual", {
             "Accent Color 1": "rgb(64, 190, 255)",
             "Accent Color 2": "rgb(129, 225, 255)"
-        });
+        }, "ShiftRight");
 
         this.GUILoaded = false;
         this.panels = [];
@@ -141,11 +141,6 @@ export default class ClickGUI extends Module {
             buttonContainer.style.backgroundColor = "rgb(10, 10, 10, 0.85)";
             buttonContainer.style.display = "flex";
             buttonContainer.style.flexDirection = "column";
-
-            if (!ConfigManager.config.modules?.[module.name]) {
-                ConfigManager.config.modules[module.name] = {};
-                ConfigManager.update();
-            }
     
             const btn = document.createElement("div");
             btn.className = "button";
@@ -242,12 +237,6 @@ export default class ClickGUI extends Module {
                     checkbox.style.background = wasChecked ? buttonColor : accentColor;
                     eventManager.emit("trollium.setting.update", module)
                     module.options[name] = !wasChecked;
-
-                    if (!ConfigManager.config.modules?.[module.name]?.options) {
-                        ConfigManager.config.modules[module.name].options = {};
-                    }
-                    ConfigManager.config.modules[module.name].options[name] = !wasChecked;
-                    ConfigManager.update();
                 });
 
                 checkbox.style.background = module.options[name] ? buttonColor : accentColor;
@@ -291,11 +280,6 @@ export default class ClickGUI extends Module {
                     colorPickerBg.style.background = event.target.value;
                     eventManager.emit("trollium.setting.update", module)
                     module.options[name] = event.target.value;
-                    if (!ConfigManager.config.modules?.[module.name]?.options) {
-                        ConfigManager.config.modules[module.name].options = {}
-                    }
-                    ConfigManager.config.modules[module.name].options[name] = event.target.value;
-                    ConfigManager.update();
                 });
         
                 colorPickerContainer.appendChild(colorPickerLabel);

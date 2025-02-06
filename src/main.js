@@ -45,12 +45,6 @@ class Trollium {
         window.gameUtils = gameUtils;
         window.mathUtils = mathUtils;
         window.hooks = hooks;
-
-        Object.keys(configManager.config.modules).forEach(mod => {
-            if (configManager.config.modules[mod].isEnabled) {
-                moduleManager.modules[mod]?.toggle();
-            }
-        })
     }
 
     disable () {

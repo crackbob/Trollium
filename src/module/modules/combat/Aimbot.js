@@ -5,22 +5,33 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class Aimbot extends Module {
     constructor () {
-        super("Aimbot", "Targets camera at player.", "Combat", null, "")
-        this.options = {
-            "Target Closest Player": false
+        super("Aimbot", "Targets camera at player.", "Combat", {
+            "Require Click": true,
+            "Target Closest Player": true,
+            "Turn Camera": true
+        }, "")
+    }
+
+    aimAtPos (targetPos) {
+        let localPlayerPos = hooks.noa.ents.getPosition(hooks.noa.playerEntity);
+        let normalizedVector = mathUtils.normalizeVector([targetPos[0] - localPlayerPos[0], targetPos[1] - localPlayerPos[1], targetPos[2] - localPlayerPos[2]]);
+
+        if (this.options["Turn Camera"]) {
+            hooks.noa.camera.heading = Math.atan2(normalizedVector[0], normalizedVector[2]);
+            hooks.noa.camera.pitch = Math.asin(-normalizedVector[1]);
         }
+
+        hooks.noa.camera._dirVector = normalizedVector;
     }
 
     onGameTick () {
-        const localPlayerPos = hooks.noa.ents.getPosition(hooks.noa.playerEntity);
+        if (this.options["Require Click"] && !hooks.noa.inputs.state.fire) return;
 
         if (this.options["Target Closest Player"]) {
-            const closestPlayerPos = [...hooks.noa.ents.getPositionData(gameUtils.getClosestAttackablePlayer()).position];
-            hooks.noa.camera._dirVector = mathUtils.normalizeVector([closestPlayerPos[0] - localPlayerPos[0], closestPlayerPos[1] - localPlayerPos[1], closestPlayerPos[2] - localPlayerPos[2]]);
+            this.aimAtPos(hooks.noa.ents.getPositionData(gameUtils.getClosestAttackablePlayer()).position);
         } else {
             gameUtils.getPlayerList().forEach((player) => {
-                const targetPlayerPos = [...hooks.noa.ents.getPositionData(player).position];
-                hooks.noa.camera._dirVector = mathUtils.normalizeVector([targetPlayerPos[0] - localPlayerPos[0], targetPlayerPos[1] - localPlayerPos[1], targetPlayerPos[2] - localPlayerPos[2]]);
+                this.aimAtPos(hooks.noa.ents.getPositionData(player).position);
             })
         }
     }

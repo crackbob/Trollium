@@ -6,11 +6,8 @@ export default class Module {
         this.name = name;
         this.description = description;
         this.category = category;
-        this.options = configManager.config?.modules?.[name]?.options || options;
+        this.options = options;
         this.keybind = configManager.config?.modules?.[name]?.keybind || keybind;
-        if (name == "ClickGUI" && !configManager.config?.modules?.[name]?.keybind) {
-            this.keybind = "ShiftRight"
-        }
         this.waitingForBind = false;
         this.isEnabled = false;
         this.toggle = this.toggle.bind(this);
@@ -36,16 +33,8 @@ export default class Module {
                 }
             }
         });
-    
-        if (this.name !== "ClickGUI") {
-            configManager.config.modules[this.name] = configManager.config.modules[this.name] || {};
-        }
 
         eventListener.emit("trollium.module.update", this)
-        
-        if (this.name !== "ClickGUI") {
-            configManager.config.modules[this.name].isEnabled = this.isEnabled;
-        }
     
         configManager.update();
 
