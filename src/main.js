@@ -12,6 +12,11 @@ class Trollium {
     }
 
     init () {
+        const link = document.createElement('link');
+        link.setAttribute('rel', 'stylesheet');
+        link.setAttribute('type', 'text/css');
+        link.setAttribute('href', 'https://fonts.cdnfonts.com/css/product-sans');
+        document.head.appendChild(link);
             
         setInterval(() => {
             EventManager.emit("trollium.render");

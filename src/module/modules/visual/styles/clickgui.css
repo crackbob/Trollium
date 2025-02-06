@@ -1,0 +1,118 @@
+:root {
+    --trollium-accent-color: linear-gradient(90deg, rgb(64, 190, 255) 0%, rgb(129, 225, 255) 100%);
+    --button-color: rgb(40, 40, 40, 0.9);
+    --hover-color: rgb(50, 50, 50, 0.9);
+    --panel-bg: rgb(34, 34, 34, 0.85);
+    --header-bg: rgb(10, 10, 10, 0.85);
+}
+
+.gui-panel {
+    position: fixed;
+    z-index: 999999;
+    width: 200px;
+    border-radius: 8px;
+    background-color: var(--panel-bg);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    font-family: 'Product Sans', sans-serif;
+    color: #fff;
+    overflow: hidden;
+}
+
+.gui-header {
+    background-color: var(--header-bg);
+    height: 40px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    cursor: grab;
+}
+
+.gui-header:active {
+    cursor: grabbing;
+}
+
+.gui-button {
+    height: 35px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 0;
+    transition: all 0.3s;
+    font-size: 20px;
+    font-weight: 200;
+    outline: none;
+    background: var(--button-color);
+}
+
+.gui-button.enabled {
+    background: var(--trollium-accent-color);
+}
+
+.gui-button:not(.enabled):hover {
+    background: var(--hover-color);
+}
+
+.gui-background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 99999;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur(15px);
+}
+
+.gui-setting-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--header-bg);
+    padding: 2px;
+}
+
+.gui-setting-label {
+    font-size: 15px;
+    margin-left: 10px;
+    font-weight: 300;
+}
+
+.gui-checkbox {
+    width: 15px;
+    height: 15px;
+    border-radius: 4px;
+    background: var(--button-color);
+    position: relative;
+    margin: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.gui-checkbox.enabled {
+    background: var(--trollium-accent-color);
+}
+
+.gui-color-picker {
+    width: 15px;
+    height: 15px;
+    border-radius: 4px;
+    position: relative;
+    margin: 8px;
+    cursor: pointer;
+}
+
+.gui-color-input {
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.gui-button-container {
+    background-color: var(--header-bg);
+    display: flex;
+    flex-direction: column;
+}
