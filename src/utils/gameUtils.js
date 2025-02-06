@@ -1,5 +1,6 @@
 import hooks from "../hooks";
 import mathUtils from "./mathUtils";
+import packets from "./packets";
 
 export default {
     getPlayerList() {
@@ -87,7 +88,7 @@ export default {
 
     selectInventorySlot(index) {
         hooks.noa.ents.getInventoryState(hooks.noa.playerEntity).inventory.setSelectedSlotIndex(index);
-        hooks.sendPacket(99, index);
+        hooks.sendPacket(34, index);
     },
 
     getPlayerName(id) {
@@ -95,7 +96,7 @@ export default {
     },
 
     placeBlock (blockPosition, heldItem) {                
-        hooks.sendPacket(84, {
+        hooks.sendPacket(packets.placeBlock, {
             pos: blockPosition,
             toBlock: heldItem.typeObj.id,
             checker: ""
