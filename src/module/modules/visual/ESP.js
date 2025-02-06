@@ -51,7 +51,7 @@ export default class ESP extends Module {
         Object.values(this.ESPMatList).forEach(mat => mat._alpha = 0);
     }
 
-    onEnterWorld () {
+    onGameEntered () {
         this.onEnable();
     }
 };

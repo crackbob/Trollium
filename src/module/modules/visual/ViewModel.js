@@ -47,7 +47,7 @@ export default class ViewModel extends Module {
         }
     }
 
-    onEnterWorld () {
+    onGameEntered () {
         this.onEnable();
     }
 };

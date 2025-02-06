@@ -40,7 +40,6 @@ export default class BoatFly extends Module {
     }
 
     onDisable () {
-        if (!gameUtils.inGame) return;
         hooks.wpRequire(2337).e[1].getVehicleMoveSpeedMult = () => this.getBoatSpeed
     }
 };

@@ -3,6 +3,7 @@ import ArrayList from "./modules/visual/Arraylist";
 import BottomChat from "./modules/visual/UITweaks";
 import gameUtils from "../utils/gameUtils";
 import configManager from "../config/manager";
+import hooks from "../hooks";
 
 import ESP from "./modules/visual/ESP";
 import ViewModel from "./modules/visual/ViewModel";
@@ -105,38 +106,33 @@ export default {
 
         let lastTickTime = 0;
         eventManager.on("gameTick", () => {
-            lastTickTime = Date.now();
-            let joinedWorld = false;
-            if (gameUtils.inGame == false) {
-                gameUtils.inGame = true;
-                joinedWorld = true;
-            }
-
             for (let name in this.modules) {
                 if (this.modules[name].isEnabled) {
                     this.modules[name].onGameTick();
-
-                    if (joinedWorld) {
-                        this.modules[name].onEnterWorld();
-                    }
                 }
             }
         });
-        eventManager.on("trollium.render", () => {
-            const now = Date.now();
-            let leftWorld = false;
-            if (now - lastTickTime > 2500 && gameUtils.inGame) {
-                gameUtils.inGame = false;
-                leftWorld = true;
+        
+        hooks.bloxdEvents.subscribe("onGameEntered", function(data) {
+            for (let name in this.modules) {
+                if (this.modules[name].isEnabled) {
+                    this.modules[name].onGameEntered();
+                }
             }
-            
+        });
+
+        hooks.bloxdEvents.subscribe("onGameExited", function(data) {
+            for (let name in this.modules) {
+                if (this.modules[name].isEnabled) {
+                    this.modules[name].onGameExited();
+                }
+            }
+        });
+
+        eventManager.on("trollium.render", () => {
             for (let name in this.modules) {
                 if (this.modules[name].isEnabled) {
                     this.modules[name].onRender();
-
-                    if (leftWorld) {
-                        this.modules[name].onExitWorld();
-                    }
                 }
             }
         });

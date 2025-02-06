@@ -14,7 +14,7 @@ export default class Derp extends Module {
     }
 
     onEnable () {
-        if (!gameUtils.inGame) return;
+        
 
         this.realHeading = hooks.noa.camera.heading;
         this.realPitch = hooks.noa.camera.pitch;
@@ -70,7 +70,7 @@ export default class Derp extends Module {
         hooks.noa.entities._storage.playerMesh.list[0].rootMesh.rotation.__defineSetter__("_y", () => this.realHeading)
     }
 
-    onEnterWorld() {
+    onGameEntered() {
         this.onEnable();
     }
 };

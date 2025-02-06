@@ -4,6 +4,7 @@ import EventManager from "./events/manager";
 import gameUtils from './utils/gameUtils';
 import hooks from "./hooks"
 import mathUtils from "./utils/mathUtils";
+import packets from "./utils/packets";
 
 class Trollium {
     constructor() {
@@ -50,6 +51,7 @@ class Trollium {
         window.gameUtils = gameUtils;
         window.mathUtils = mathUtils;
         window.hooks = hooks;
+        window.packets = packets;
     }
 
     disable () {

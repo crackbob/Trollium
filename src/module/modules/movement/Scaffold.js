@@ -38,7 +38,7 @@ export default class Scaffold extends Module {
     }
 
     onEnable() {
-        if (!gameUtils.inGame) return;
+        
         let physicsBody = hooks.noa.entities.getPhysicsBody(hooks.noa.playerEntity);
         gameUtils.freezeValue(physicsBody, "preventFallOffEdge", true);
 

@@ -7,12 +7,12 @@ export default class Wireframe extends Module {
     }
 
     onEnable () {
-        if (!gameUtils.inGame) return;
+        
         hooks.noa.rendering.scene.forceWireframe = true;
     }
 
     onDisable () {
-        if (!gameUtils.inGame) return;
+        
         hooks.noa.rendering.scene.forceWireframe = false;
     }
 };

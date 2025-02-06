@@ -32,7 +32,7 @@ export default class NoClip extends Module {
         this.posData.height = 1.8;
     }
 
-    onEnterWorld () {
+    onGameEntered () {
         this.onEnable();
     }
 };

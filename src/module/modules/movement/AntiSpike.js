@@ -7,7 +7,7 @@ export default class AntiSpike extends Module {
     }
 
     onEnable () {
-        if (!gameUtils.inGame) return;
+        
         let blocks = Object.values(Object.values(hooks.findModule("Gun:class")).find(prop => typeof prop == "object"));
         blocks.filter(block => block.name.includes("Spikes")).forEach(function (block) {
             hooks.noa.registry._solidityLookup[block.id] = true;
@@ -15,14 +15,14 @@ export default class AntiSpike extends Module {
     }
 
     onDisable () {
-        if (!gameUtils.inGame) return;
+        
         let blocks = Object.values(Object.values(hooks.findModule("Gun:class")).find(prop => typeof prop == "object"));
         blocks.filter(block => block.name.includes("Spikes")).forEach(function (block) {
             hooks.noa.registry._solidityLookup[block.id] = false;
         });
     }
 
-    onEnterWorld () {
+    onGameEntered () {
         this.onEnable();
     }
 };

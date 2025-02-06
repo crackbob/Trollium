@@ -65,7 +65,7 @@ export default class Killsults extends Module {
         this.listener = null;
     }
 
-    onEnterWorld () {
+    onGameEntered () {
         this.onEnable();
     }
 };

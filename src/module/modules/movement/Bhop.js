@@ -17,7 +17,6 @@ export default class Bhop extends Module {
     }
 
     onDisable () {
-        if (!gameUtils.inGame) return;
         gameUtils.unfreezeValue(this.playerMovement, "onGroundPrevTick");
         gameUtils.unfreezeValue(this.playerMovement, "_hadJumpInputPrevTick");
     }

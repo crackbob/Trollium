@@ -7,16 +7,16 @@ export default class FastCrouch extends Module {
     }
 
     onEnable () {
-        if (!gameUtils.inGame) return;
+        
         hooks.noa.serverSettings.crouchingSpeed = 7.75;
     }
 
     onDisable () {
-        if (!gameUtils.inGame) return;
+        
         hooks.noa.serverSettings.crouchingSpeed = 2;
     }
 
-    onEnterWorld () {
+    onGameEntered () {
         this.onEnable();
     }
 };

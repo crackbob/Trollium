@@ -44,7 +44,7 @@ export default class UITweaks extends Module {
         this.onEnable();
     }
 
-    onEnterWorld () {
+    onGameEntered () {
         // give time for UI to render
         setTimeout(() => {
             if (this.chatElement?.style && this.options["Bottom Chat"]) {

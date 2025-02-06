@@ -15,8 +15,6 @@ export default class MagicBullet extends Module {
     }
 
     onEnable () {
-        if (!gameUtils.inGame) return;
-
         let getTargetPlayer = () => this.targetPlayer.toString();
         this.heldItem.fireBullet = function () {
             let retVal = this.__proto__.fireBullet.apply(this, arguments);
@@ -36,7 +34,7 @@ export default class MagicBullet extends Module {
     }
 
     onDisable () {
-        if (!gameUtils.inGame) return;
+        
         this.heldItem.fireBullet = this.heldItem.__proto__.fireBullet.bind(this.heldItem);
     }
 };

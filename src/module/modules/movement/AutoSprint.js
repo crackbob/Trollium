@@ -7,18 +7,18 @@ export default class AutoSprint extends Module {
     }
 
     onEnable () {
-        if (!gameUtils.inGame) return;
+        
         hooks.noa.serverSettings.walkingSpeed = 7.75;
         hooks.noa.serverSettings.runningSpeed = 7.75;
     }
 
     onDisable () {
-        if (!gameUtils.inGame) return;
+        
         hooks.noa.serverSettings.walkingSpeed = 4;
         hooks.noa.serverSettings.runningSpeed = 7;
     }
 
-    onEnterWorld () {
+    onGameEntered () {
         this.onEnable();
     }
 };

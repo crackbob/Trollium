@@ -17,8 +17,8 @@ export default class Module {
     onDisable() {}
     onGameTick() {}
     onRender() {}
-    onEnterWorld() {}
-    onExitWorld() {}
+    onGameEntered() {}
+    onGameExited() {}
     onSettingUpdate() {}
 
     enable () {

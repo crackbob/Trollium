@@ -8,18 +8,18 @@ export default class SafeWalk extends Module {
     }
 
     onEnable () {
-        if (!gameUtils.inGame) return;
+        
         let physicsBody = hooks.noa.entities.getPhysicsBody(hooks.noa.playerEntity);
         gameUtils.freezeValue(physicsBody, "preventFallOffEdge", true);
     }
 
     onDisable () {
-        if (!gameUtils.inGame) return;
+        
         let physicsBody = hooks.noa.entities.getPhysicsBody(hooks.noa.playerEntity);
         gameUtils.unfreezeValue(physicsBody, "preventFallOffEdge");
     }
 
-    onEnterWorld () {
+    onGameEntered () {
         this.onEnable();
     }
 };

@@ -9,7 +9,7 @@ export default class HighJump extends Module {
     }
 
     onEnable () {
-        if (!gameUtils.inGame) return;
+        
         let physicsBody = hooks.noa.entities.getPhysicsBody(hooks.noa.playerEntity);
         let inventory = hooks.noa.ents.getInventoryState(hooks.noa.playerEntity);
         let playerPos = hooks.noa.ents.getPositionData(hooks.noa.playerEntity).position;

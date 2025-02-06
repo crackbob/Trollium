@@ -13,7 +13,7 @@ export default class Blink extends Module {
     }
 
     onEnable () {
-        if (!gameUtils.inGame) return;
+        
         this.sendBytes = this.sendBytes || this.colyRoom.sendBytes;
         this.colyRoom.sendBytes = function () {
             packets.push(arguments);
@@ -21,7 +21,7 @@ export default class Blink extends Module {
     }
 
     onDisable () {
-        if (!gameUtils.inGame) return;
+        
         packets.forEach(packet => this.sendBytes.apply(this.colyRoom, packet));
         this.colyRoom.sendBytes = this.sendBytes;
         packets = [];
