@@ -39,6 +39,9 @@ import AntiSpike from "./modules/movement/AntiSpike";
 
 export default {
     modules: {},
+    addModules: function (modules) {
+        for(const module of modules) this.modules[module.name] = module;
+    },
     addModule: function (module) {
         this.modules[module.name] = module;
     },
@@ -72,40 +75,42 @@ export default {
     },
 
     init () {
-        this.addModule(new ArrayList());
-        this.addModule(new BottomChat());
-        this.addModule(new ESP());
-        this.addModule(new UITweaks());
-        this.addModule(new ViewModel());
-        this.addModule(new Watermark());
-        this.addModule(new Wireframe());
-        this.addModule(new AutoSprint());
-        this.addModule(new Bhop());
-        this.addModule(new BoatFly());
-        this.addModule(new FireballFly());
-        this.addModule(new HighJump());
-        this.addModule(new NoClip());
-        this.addModule(new SafeWalk());
-        this.addModule(new Scaffold());
-        this.addModule(new Spider());
-        this.addModule(new Velocity());
-        this.addModule(new Blink());
-        this.addModule(new FastBreak());
-        this.addModule(new Killsults());
-        this.addModule(new Aimbot());
-        this.addModule(new AntiRecoil());
-        this.addModule(new Killaura());
-        this.addModule(new TargetStrafe());
-        this.addModule(new ClickGUI());
-        this.addModule(new ItemReach());
-        this.addModule(new FastCrouch());
-        this.addModule(new Derp());
-        this.addModule(new Jesus());
-        this.addModule(new MagicBullet());
-        this.addModule(new BedAura());
-        this.addModule(new Freeze());
-        this.addModule(new Fill());
-        this.addModule(new AntiSpike());
+        this.addModules([
+            new ArrayList(),
+            new BottomChat(),
+            new ESP(),
+            new UITweaks(),
+            new ViewModel(),
+            new Watermark(),
+            new Wireframe(),
+            new AutoSprint(),
+            new Bhop(),
+            new BoatFly(),
+            new FireballFly(),
+            new HighJump(),
+            new NoClip(),
+            new SafeWalk(),
+            new Scaffold(),
+            new Spider(),
+            new Velocity(),
+            new Blink(),
+            new FastBreak(),
+            new Killsults(),
+            new Aimbot(),
+            new AntiRecoil(),
+            new Killaura(),
+            new TargetStrafe(),
+            new ClickGUI(),
+            new ItemReach(),
+            new FastCrouch(),
+            new Derp(),
+            new Jesus(),
+            new MagicBullet(),
+            new BedAura(),
+            new Freeze(),
+            new Fill(),
+            new AntiSpike()
+        ]);
 
         let lastTickTime = 0;
         eventManager.on("gameTick", () => {
