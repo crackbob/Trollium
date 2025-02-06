@@ -20,6 +20,8 @@ export default class ModuleSettings {
                 this.addColorPicker(key);
             } else if (settingType === "boolean") {
                 this.addCheckbox(key);
+            } else if (settingType === "string" && !isNaN(settingValue)) {
+                this.addNumberInput(key);
             }
         });
 
@@ -32,6 +34,48 @@ export default class ModuleSettings {
         this.components.forEach(component => {
             component.style.display = this.isOpen ? "flex" : "none";
         });
+    }
+
+    addNumberInput(name) {
+        const container = document.createElement("div");
+        container.className = "gui-setting-container";
+
+        const label = document.createElement("span");
+        label.className = "gui-setting-label";
+        label.textContent = name;
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "gui-text-input";
+        input.value = this.module.options[name];
+
+        let lastValidValue = input.value;
+
+        input.addEventListener("input", () => {
+            const value = input.value.trim();
+            if (!isNaN(value) && value !== "") {
+                lastValidValue = value;
+                this.module.options[name] = value;
+                eventManager.emit("trollium.setting.update", this.module);
+            }
+        });
+
+        input.addEventListener("blur", () => {
+            if (isNaN(input.value) || input.value.trim() === "") {
+                input.value = lastValidValue;
+            }
+        });
+
+        input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                input.blur();
+            }
+        });
+
+        container.appendChild(label);
+        container.appendChild(input);
+        this.container.appendChild(container);
+        this.components.push(container);
     }
 
     addCheckbox(name) {

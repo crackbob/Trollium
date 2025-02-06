@@ -3,7 +3,11 @@
     --button-color: rgb(40, 40, 40, 0.9);
     --hover-color: rgb(50, 50, 50, 0.9);
     --panel-bg: rgb(34, 34, 34, 0.85);
-    --header-bg: rgb(10, 10, 10, 0.85);
+    --panel-bg: rgb(10, 10, 10, 0.85);
+    --text-color: #ffffff;
+    --header-text-size: 25px;
+    --button-text-size: 20px;
+    --setting-text-size: 15px;
 }
 
 .gui-panel {
@@ -14,7 +18,7 @@
     background-color: var(--panel-bg);
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     font-family: 'Product Sans', sans-serif;
-    color: #fff;
+    color: var(--text-color);
     overflow: hidden;
 }
 
@@ -25,7 +29,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 25px;
+    font-size: var(--header-text-size);
     cursor: grab;
 }
 
@@ -42,10 +46,11 @@
     cursor: pointer;
     border-radius: 0;
     transition: all 0.3s;
-    font-size: 20px;
+    font-size: var(--button-text-size);
     font-weight: 200;
     outline: none;
     background: var(--button-color);
+    color: var(--text-color);
 }
 
 .gui-button.enabled {
@@ -70,14 +75,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--header-bg);
+    background-color: var(--panel-bg);
     padding: 2px;
 }
 
 .gui-setting-label {
-    font-size: 15px;
+    font-size: var(--setting-text-size);
     margin-left: 10px;
     font-weight: 300;
+    color: var(--text-color);
 }
 
 .gui-checkbox {
@@ -112,7 +118,30 @@
 }
 
 .gui-button-container {
-    background-color: var(--header-bg);
+    background-color: var(--panel-bg);
     display: flex;
     flex-direction: column;
+}
+
+.gui-text-input {
+    background: var(--button-color);
+    border: none;
+    color: var(--text-color);
+    font-family: 'Product Sans', sans-serif;
+    font-size: var(--setting-text-size);
+    padding: 2px 5px;
+    width: 40px;
+    border-radius: 4px;
+    outline: none;
+    transition: background 0.3s;
+    text-align: center;
+    margin-right: 10px;
+}
+
+.gui-text-input:hover {
+    background: var(--hover-color);
+}
+
+.gui-text-input:focus {
+    background: var(--hover-color);
 }

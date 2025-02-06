@@ -8,18 +8,34 @@ export default class ClickGUI extends Module {
     constructor() {
         super("ClickGUI", "Mod menu of the client.", "Visual", {
             "Accent Color 1": "rgb(64, 190, 255)",
-            "Accent Color 2": "rgb(129, 225, 255)"
+            "Accent Color 2": "rgb(129, 225, 255)",
+            "Button Color": "rgb(40, 40, 40, 0.9)",
+            "Hover Color": "rgb(50, 50, 50, 0.9)",
+            "Header Color": "rgb(0, 0, 0, 0.85)",
+            "Panel Color": "rgb(34, 34, 34, 0.85)",
+            "Text Color": "#ffffff",
+            "Header Text Size": "25",
+            "Button Text Size": "20",
+            "Setting Text Size": "15"
         }, "ShiftRight");
 
         this.GUILoaded = false;
         this.panels = [];
         this.blurredBackground = null;
-        this.updateAccentColors();
+        this.updateColors();
     }
 
-    updateAccentColors() {
+    updateColors() {
         document.body.style.setProperty('--trollium-accent-color', 
             `linear-gradient(90deg, ${this.options["Accent Color 1"]} 0%, ${this.options["Accent Color 2"]} 100%)`);
+        document.body.style.setProperty('--button-color', this.options["Button Color"]);
+        document.body.style.setProperty('--hover-color', this.options["Hover Color"]);
+        document.body.style.setProperty('--header-bg', this.options["Header Color"]);
+        document.body.style.setProperty('--panel-bg', this.options["Panel Color"]);
+        document.body.style.setProperty('--text-color', this.options["Text Color"]);
+        document.body.style.setProperty('--header-text-size', this.options["Header Text Size"] + "px");
+        document.body.style.setProperty('--button-text-size', this.options["Button Text Size"] + "px");
+        document.body.style.setProperty('--setting-text-size', this.options["Setting Text Size"] + "px");
     }
 
     onEnable() {
@@ -89,6 +105,6 @@ export default class ClickGUI extends Module {
     }
 
     onSettingUpdate() {
-        this.updateAccentColors();
+        this.updateColors();
     }
 }
