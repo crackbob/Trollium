@@ -24,7 +24,7 @@ export default class Watermark extends Module {
             watermarkElement.style.padding = "0.5em";
             watermarkElement.style.userSelect = "none";
             watermarkElement.style.display = "none";
-            watermarkElement.style.zIndex = "999999";
+            watermarkElement.style.zIndex = "1000";
             watermarkElement.style.textShadow = "var(--trollium-accent-color) 0px 0px 10px";
             watermarkElement.style.fontFamily = "'Product Sans', sans-serif";
             watermarkElement.style.fontSize = "24px";

@@ -29,8 +29,8 @@ export default class Speed extends Module {
     }
     onGameTick () {
         let physicsBody = hooks.noa.entities.getPhysicsBody(hooks.noa.playerEntity);
-        if (physicsBody.atRestY() < 0) {
-            physicsBody.velocity[1] = 1;
+        if (physicsBody.atRestY() < 0 && !hooks.noa.inputs.state.jump) {
+            physicsBody.velocity[1] = 0.8;
         }
     }
 };
