@@ -74,6 +74,7 @@
     height: 100%;
     width: 100%;
     backdrop-filter: blur(15px);
+    background: rgba(0, 0, 0, 0.3);
 }
 
 .gui-setting-container {
@@ -149,4 +150,53 @@
 
 .gui-text-input:focus {
     background: var(--hover-color);
+}
+
+.with-animations .gui-panel {
+    animation: fadeInScale 0.3s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.with-animations .gui-background {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.with-animations .gui-button {
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.with-animations .gui-button:hover {
+    transform: scale(1.05);
+}
+
+.with-animations .gui-setting-container {
+    will-change: transform, opacity;
+    transform-origin: top;
+    animation: slideDown 0.25s ease-out forwards;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: scaleY(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scaleY(1);
+    }
 }

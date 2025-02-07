@@ -13,13 +13,22 @@ export default class ClickGUI extends Module {
             "Hover Color": "rgb(50, 50, 50, 0.9)",
             "Header Color": "rgb(0, 0, 0, 0.85)",
             "Panel Color": "rgb(18 18 18)",
-            "Text Color": "#ffffff"
+            "Text Color": "#ffffff",
+            "Enable Animations": true
         }, "ShiftRight");
 
         this.GUILoaded = false;
         this.panels = [];
         this.blurredBackground = null;
         this.updateColors();
+    }
+
+    updateAnimations() {
+        if (this.options["Enable Animations"]) {
+            document.body.classList.add("with-animations");
+        } else {
+            document.body.classList.remove("with-animations");
+        }
     }
 
     updateColors() {
@@ -40,8 +49,10 @@ export default class ClickGUI extends Module {
             this.createPanels();
             this.setupEventListeners();
             this.GUILoaded = true;
+            this.updateAnimations();
         } else {
             this.showGUI();
+            this.updateAnimations();
         }
     }
 
@@ -101,13 +112,11 @@ export default class ClickGUI extends Module {
     showGUI() {
         this.panels.forEach(panel => panel.show());
         this.blurredBackground.style.display = "block";
-        document.getElementById("root").style.opacity = "0";
     }
 
     onDisable() {
         this.panels.forEach(panel => panel.hide());
         this.blurredBackground.style.display = "none";
-        document.getElementById("root").style.opacity = "1";
         
         const gameCanvas = document.getElementById("noa-canvas");
         if (gameCanvas) {
@@ -118,5 +127,6 @@ export default class ClickGUI extends Module {
 
     onSettingUpdate() {
         this.updateColors();
+        this.updateAnimations();
     }
 }
