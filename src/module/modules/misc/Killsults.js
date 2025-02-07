@@ -37,7 +37,7 @@ const insults = [
 
 export default class Killsults extends Module {
     constructor () {
-        super("Killsults", "Insults people after killing them", "Misc", null, "")
+        super("Killsults", "Insults people after killing them", "Misc", null)
     }
 
     listener = null;

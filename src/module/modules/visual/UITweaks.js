@@ -2,7 +2,7 @@ import Module from "../../module";
 
 export default class UITweaks extends Module {
     constructor () {
-        super("UI Tweaks", "Tweak Elements of the UI", "Visual", null, "")
+        super("UI Tweaks", "Tweak Elements of the UI", "Visual", null)
 
         this.options = {
             "Hide Lobby": false,

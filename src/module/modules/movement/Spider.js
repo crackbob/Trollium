@@ -4,7 +4,7 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class Spider extends Module {
     constructor () {
-        super("Spider", "Allows for climbing up walls.", "Movement", null, "")
+        super("Spider", "Allows for climbing up walls.", "Movement", null)
     }
 
     onGameTick() {

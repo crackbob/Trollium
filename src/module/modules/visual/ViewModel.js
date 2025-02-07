@@ -9,7 +9,7 @@ export default class ViewModel extends Module {
             "X": -0.05,
             "Y": 0.05,
             "Z": 0.05
-        }, "")
+        })
     }
 
     get heldItemState () {

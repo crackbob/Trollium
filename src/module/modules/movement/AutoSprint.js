@@ -3,7 +3,7 @@ import hooks from "../../../hooks";
 
 export default class AutoSprint extends Module {
     constructor () {
-        super("AutoSprint", "Sets your movement to always sprint, and slight speed boost.", "Movement", null, "")
+        super("AutoSprint", "Sets your movement to always sprint, and slight speed boost.", "Movement", null)
     }
 
     onEnable () {

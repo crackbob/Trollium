@@ -11,7 +11,7 @@ export default class Aimbot extends Module {
             "Turn Camera": true,
             "Smoothing": 0.2,
             "Y Offset": 0
-        }, "")
+        })
         
         this.currentHeading = 0;
         this.currentPitch = 0;

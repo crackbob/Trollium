@@ -4,7 +4,7 @@ export default class Watermark extends Module {
     constructor () {
         super("Watermark", "Watermark showing client name.", "Visual", {
             "Text": "Trollium"
-        }, "")
+        })
     }
 
     onSettingUpdate() {
