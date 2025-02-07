@@ -22,7 +22,7 @@ export default class Blink extends Module {
         const options = this.options;
 
         this.colyRoom.sendBytes = (...args) => {
-            const context = this;
+            const context = this.colyRoom;
             const interval = parseFloat(options["Interval"]);
 
             if (options["No Packet"]) return;
