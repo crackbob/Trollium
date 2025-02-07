@@ -38,6 +38,7 @@ import Fill from "./modules/misc/Fill";
 import AntiSpike from "./modules/movement/AntiSpike";
 import AntiBan from "./modules/misc/AntiBan";
 import NoSlow from "./modules/movement/NoSlow";
+import IdentityCrisis from "./modules/misc/IdentityCrisis";
 
 export default {
     modules: {},
@@ -103,7 +104,8 @@ export default {
             new Fill(),
             new AntiSpike(),
             new AntiBan(),
-            new NoSlow()
+            new NoSlow(),
+            new IdentityCrisis()
         );
 
         events.on("gameTick", () => {

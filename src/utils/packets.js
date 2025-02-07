@@ -14,5 +14,9 @@ export default {
 
     get placeBlock () {
         return this.findPacket(packetSchema => packetSchema?.fields?.[2]?.name == "checker");
-    } 
+    },
+
+    get changeSkin () {
+        return this.findPacket(packetSchema => packetSchema?.fields?.[0]?.name == "partType");
+    }
 }
