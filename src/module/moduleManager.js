@@ -41,7 +41,7 @@ import NoSlow from "./modules/movement/NoSlow";
 
 export default {
     modules: {},
-    addModules: function (modules) {
+    addModules: function (...modules) {
         for(const module of modules) this.modules[module.name] = module;
     },
     addModule: function (module) {
@@ -68,7 +68,7 @@ export default {
     },
 
     init () {
-        this.addModules([
+        this.addModules(
             new ArrayList(),
             new BottomChat(),
             new ESP(),
@@ -104,7 +104,7 @@ export default {
             new AntiSpike(),
             new AntiBan(),
             new NoSlow()
-        ]);
+        );
 
         events.on("gameTick", () => {
             for (let name in this.modules) {
