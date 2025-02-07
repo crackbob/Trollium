@@ -88,18 +88,20 @@ export default {
 
     selectInventorySlot(index) {
         hooks.noa.ents.getInventoryState(hooks.noa.playerEntity).inventory.setSelectedSlotIndex(index);
-        hooks.sendPacket(34, index);
+        hooks.sendPacket(56, index);
     },
 
     getPlayerName(id) {
         return hooks.noa.bloxd.entityNames[id].entityName;
     },
 
-    placeBlock (blockPosition, heldItem) {                
+    placeBlock (blockPosition, heldItem) {       
+        let checker = Object.values(hooks.findModule("checker:")).find(fn => fn.toString().includes("()=>("))();
+
         hooks.sendPacket(packets.placeBlock, {
             pos: blockPosition,
             toBlock: heldItem.typeObj.id,
-            checker: ""
+            checker: checker
         }, !0);
         
         hooks.noa.bloxd.setBlock(...blockPosition, heldItem.typeObj.id);
