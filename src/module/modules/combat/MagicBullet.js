@@ -5,7 +5,7 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class MagicBullet extends Module {
     constructor () {
-        super("Magic Bullet", "Beam people from across the map", "Combat", null, "")
+        super("MagicBullet", "Beam people from across the map", "Combat", null, "")
         this._fireBullet;
         this.targetPlayer = "";
     }

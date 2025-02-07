@@ -4,7 +4,7 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class SafeWalk extends Module {
     constructor () {
-        super("Safe Walk", "Don't fall off blocks", "Movement", null, "")
+        super("SafeWalk", "Don't fall off blocks", "Movement", null, "")
     }
 
     onEnable () {

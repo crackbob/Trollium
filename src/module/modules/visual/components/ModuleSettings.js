@@ -1,4 +1,4 @@
-import eventManager from "../../../../events/manager";
+import events from "../../../../events";
 
 export default class ModuleSettings {
     constructor(module, container) {
@@ -61,7 +61,7 @@ export default class ModuleSettings {
             if (!isNaN(value) && value !== "") {
                 lastValidValue = value;
                 this.module.options[name] = value;
-                eventManager.emit("trollium.setting.update", this.module);
+                events.emit("setting.update", this.module);
             }
         });
 
@@ -99,7 +99,7 @@ export default class ModuleSettings {
             const wasChecked = checkbox.classList.contains("enabled");
             checkbox.classList.toggle("enabled");
             this.module.options[name] = (!wasChecked).toString();
-            eventManager.emit("trollium.setting.update", this.module);
+            events.emit("setting.update", this.module);
         });
 
         container.appendChild(label);
@@ -128,7 +128,7 @@ export default class ModuleSettings {
         colorPicker.addEventListener("input", (event) => {
             colorPickerBg.style.background = event.target.value;
             this.module.options[name] = event.target.value;
-            eventManager.emit("trollium.setting.update", this.module);
+            events.emit("setting.update", this.module);
         });
 
         container.appendChild(label);

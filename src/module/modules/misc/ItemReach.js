@@ -4,7 +4,7 @@ import mathUtils from "../../../utils/mathUtils";
 
 export default class ItemReach extends Module {
     constructor () {
-        super("Item Reach", "Pick up items from 5 blocks away", "Misc", null, "");
+        super("ItemReach", "Pick up items from 5 blocks away", "Misc", null, "");
         this._getEntitiesInAABB;
     }
 

@@ -1,5 +1,5 @@
 import configManager from "../config/manager";
-import eventListener from "../events/manager"
+import eventListener from "../events"
 
 export default class Module {
     constructor(name, description, category, options, keybind) {
@@ -23,13 +23,13 @@ export default class Module {
 
     enable () {
         this.isEnabled = true;
-        eventListener.emit("trollium.module.update", this);
+        eventListener.emit("module.update", this);
         this.onEnable();
     }
 
     disable () {
         this.isEnabled = false;
-        eventListener.emit("trollium.module.update", this);
+        eventListener.emit("module.update", this);
         this.onDisable();
     }
 

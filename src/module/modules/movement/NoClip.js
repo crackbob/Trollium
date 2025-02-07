@@ -3,7 +3,7 @@ import hooks from "../../../hooks";
 
 export default class NoClip extends Module {
     constructor () {
-        super("No Clip", "Go through stuff.", "Movement", "", "KeyM")
+        super("NoClip", "Go through stuff.", "Movement", "", "KeyM")
     }
 
     get posData () {

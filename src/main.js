@@ -1,6 +1,6 @@
 import configManager from "./config/manager";
 import moduleManager from "./module/moduleManager";
-import EventManager from "./events/manager";
+import events from "./events";
 import gameUtils from './utils/gameUtils';
 import hooks from "./hooks"
 import mathUtils from "./utils/mathUtils";
@@ -13,28 +13,10 @@ class Trollium {
     }
 
     init () {
-        const link = document.createElement('link');
-        link.setAttribute('rel', 'stylesheet');
-        link.setAttribute('type', 'text/css');
-        link.setAttribute('href', 'https://fonts.cdnfonts.com/css/product-sans');
-        document.head.appendChild(link);
             
         setInterval(() => {
-            EventManager.emit("trollium.render");
-            if (document.querySelector(".ErrorPopupTitleBody") && document.querySelector(".ErrorPopupTitleBody").textContent.includes("banned") && !document.querySelector(".ErrorPopupTitleBody").innerHTML.includes("Click to be unbanned.")) {
-                var h1 = document.createElement("h1");
-                h1.textContent = "Click to be unbanned.";
-        
-                document.querySelector(".ErrorPopupTitleBody").appendChild(h1);
-        
-                h1.addEventListener("click", function () {
-                    document.cookie.split(";").forEach(function (cookie) {
-                        document.cookie = cookie.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-                    });
-                    location.reload();
-                });
-            }
-
+            events.emit("render");
+            
             if (hooks.noa?.ents.getHeldItem(hooks.noa.playerEntity)?.doAttack) {
                 gameUtils.doAttack = hooks.noa.ents.getHeldItem(hooks.noa.playerEntity).doAttack.bind(hooks);
             }
@@ -42,7 +24,7 @@ class Trollium {
         }, (1000 / 60));
 
         document.addEventListener("keydown", (e) => {
-            EventManager.emit("trollium.keydown", e.code);
+            events.emit("keydown", e.code);
         });
 
         hooks.init();

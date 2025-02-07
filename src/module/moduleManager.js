@@ -1,4 +1,4 @@
-import eventManager from "../events/manager";
+import events from "../events";
 import ArrayList from "./modules/visual/Arraylist";
 import BottomChat from "./modules/visual/UITweaks";
 import gameUtils from "../utils/gameUtils";
@@ -27,7 +27,6 @@ import Killaura from "./modules/combat/Killaura";
 import TargetStrafe from "./modules/combat/TargetStrafe";
 import Velocity from "./modules/movement/Velocity";
 import ClickGUI from "./modules/visual/ClickGUI";
-import FastCrouch from "./modules/movement/FastCrouch";
 import UITweaks from "./modules/visual/UITweaks";
 import Derp from "./modules/misc/Derp";
 import ItemReach from "./modules/misc/ItemReach";
@@ -37,6 +36,8 @@ import BedAura from "./modules/misc/BedAura";
 import Freeze from "./modules/movement/Freeze";
 import Fill from "./modules/misc/Fill";
 import AntiSpike from "./modules/movement/AntiSpike";
+import AntiBan from "./modules/misc/AntiBan";
+import NoSlow from "./modules/movement/NoSlow";
 
 export default {
     modules: {},
@@ -94,18 +95,18 @@ export default {
             new TargetStrafe(),
             new ClickGUI(),
             new ItemReach(),
-            new FastCrouch(),
             new Derp(),
             new Jesus(),
             new MagicBullet(),
             new BedAura(),
             new Freeze(),
             new Fill(),
-            new AntiSpike()
+            new AntiSpike(),
+            new AntiBan(),
+            new NoSlow()
         ]);
 
-        let lastTickTime = 0;
-        eventManager.on("gameTick", () => {
+        events.on("gameTick", () => {
             for (let name in this.modules) {
                 if (this.modules[name].isEnabled) {
                     this.modules[name].onGameTick();
@@ -129,7 +130,7 @@ export default {
             }
         });
 
-        eventManager.on("trollium.render", () => {
+        events.on("render", () => {
             for (let name in this.modules) {
                 if (this.modules[name].isEnabled) {
                     this.modules[name].onRender();
@@ -137,8 +138,8 @@ export default {
             }
         });
 
-        eventManager.on("trollium.keydown", this.handleKeyPress.bind(this));
-        eventManager.on("trollium.setting.update", () => {
+        events.on("keydown", this.handleKeyPress.bind(this));
+        events.on("setting.update", () => {
             for (let name in this.modules) {
                 if (this.modules[name].isEnabled) {
                     this.modules[name].onSettingUpdate();
@@ -149,5 +150,6 @@ export default {
         
         this.modules["Arraylist"].enable();
         this.modules["Watermark"].enable();
+        this.modules["AntiBan"].enable();
     }
 };

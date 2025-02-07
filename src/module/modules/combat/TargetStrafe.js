@@ -4,7 +4,8 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class TargetStrafe extends Module {
     constructor() {
-        super("Target Strafe", "Allows you to strafe around the target while attacking player.", "Combat", {
+        super("TargetStrafe", "Allows you to strafe around the target while attacking player.", "Combat", {
+            "On Attack": false,
             "Lock-on Radius": 3,
             "Spin Radius": 1.5,
             "Spin Speed ": 0.1,
@@ -22,7 +23,10 @@ export default class TargetStrafe extends Module {
             (target[2] - playerPos[2]) ** 2 
         );
 
-        if (distanceToTarget < parseFloat(this.options["Lock-on Radius"]) && gameUtils.lastKillauraAttack > (Date.now() - 200) && gameUtils.onGround()) {
+        let attacking = gameUtils.lastKillauraAttack > (Date.now() - 200);
+        let onAttack = this.options["On Attack"];
+
+        if (distanceToTarget < parseFloat(this.options["Lock-on Radius"]) && (onAttack == false || (onAttack && attacking)) && gameUtils.onGround()) {
 
             if (!gameUtils.touchingWall()) {
                 this.angle += parseFloat(this.options["Spin Speed "]);

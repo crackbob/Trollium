@@ -1,6 +1,6 @@
 import Module from "../../module";
 import moduleManager from "../../moduleManager";
-import eventManager from "../../../events/manager"
+import events from "../../../events"
 
 export default class ArrayList extends Module {
     constructor () {
@@ -88,7 +88,7 @@ export default class ArrayList extends Module {
 
             document.body.appendChild(this.arraylistContainer);
 
-            eventManager.on("trollium.module.update", (module) => {
+            events.on("module.update", (module) => {
                 this.update(module.name, module.isEnabled);
             });
 

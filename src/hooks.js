@@ -1,4 +1,4 @@
-import eventManager from "./events/manager";
+import events from "./events";
 
 export default {
     "wpRequire": null,
@@ -24,7 +24,7 @@ export default {
         let _renderTickLocalPlayer = targetModule.HeldItem.prototype.renderTickLocalPlayer;
         targetModule.HeldItem.prototype.renderTickLocalPlayer = function () {
             appendHook("noa", this.noa);
-            eventManager.emit("gameTick");
+            events.emit("gameTick");
             return _renderTickLocalPlayer.apply(this, arguments);
         }
 

@@ -9,7 +9,8 @@ export default class Aimbot extends Module {
             "Require Click": true,
             "Target Closest Player": true,
             "Turn Camera": true,
-            "Smoothing": 0.2
+            "Smoothing": 0.2,
+            "Y Offset": 0
         }, "")
         
         this.currentHeading = 0;
@@ -37,6 +38,8 @@ export default class Aimbot extends Module {
         if (!this.targetPos) {
             this.initializeTargetPos();
         }
+
+        this.targetPos[1] += parseFloat(this.options["Y Offset"]);
 
         let smoothing = Math.max(0.01, Math.min(1, this.options["Smoothing"] * deltaTime));
         this.targetPos = this.targetPos.map((curr, i) => 

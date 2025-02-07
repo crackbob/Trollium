@@ -4,7 +4,7 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class BoatFly extends Module {
     constructor () {
-        super("Boat Fly", "Fly with a boat", "Movement")
+        super("BoatFly", "Fly with a boat", "Movement")
     }
 
     getBoatSpeed = null;

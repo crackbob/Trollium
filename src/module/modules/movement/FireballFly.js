@@ -4,7 +4,7 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class FireballFly extends Module {
     constructor () {
-        super("Fireball Fly", "Fly with fireballs.", "Movement", {
+        super("FireballFly", "Fly with fireballs.", "Movement", {
             "Fly Speed": 100
         }, "KeyV")
     }

@@ -1,6 +1,6 @@
 import Module from "../../module.js";
 import moduleManager from "../../moduleManager.js";
-import eventManager from "../../../events/manager";
+import events from "../../../events";
 import Panel from "./components/Panel.js";
 import "./styles/clickgui.css";
 
@@ -89,7 +89,7 @@ export default class ClickGUI extends Module {
     }
 
     setupEventListeners() {
-        eventManager.on("trollium.module.update", (module) => {
+        events.on("module.update", (module) => {
             const panel = this.panels.find(p => p.header.textContent === module.category);
             if (!panel) return;
             

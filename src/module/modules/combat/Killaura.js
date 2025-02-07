@@ -5,7 +5,7 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class Killaura extends Module {
     constructor () {
-        super("Killaura", "Targets and kills players within 10 block radius.", "Combat", {
+        super("KillAura", "Targets and kills players within 10 block radius.", "Combat", {
             "Criticals": true
         }, "KeyK")
     }

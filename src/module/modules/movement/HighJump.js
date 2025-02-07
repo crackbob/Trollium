@@ -5,7 +5,7 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class HighJump extends Module {
     constructor () {
-        super("High Jump", "Jump really high off ladders.", "Movement", null, "KeyF")
+        super("HighJump", "Jump really high off ladders.", "Movement", null, "KeyF")
     }
 
     onEnable () {
@@ -28,8 +28,8 @@ export default class HighJump extends Module {
         }
 
         setTimeout(() => {
-            if (moduleManager.modules["High Jump"].isEnabled) {
-                moduleManager.modules["High Jump"].toggle();
+            if (moduleManager.modules["HighJump"].isEnabled) {
+                moduleManager.modules["HighJump"].toggle();
             }
         }, 1000)
     }

@@ -3,7 +3,7 @@ import hooks from "../../../hooks";
 
 export default class FastBreak extends Module {
     constructor () {
-        super("Fast Break", "Break blocks 2 times faster.", "Misc", null, "");
+        super("FastBreak", "Break blocks 2 times faster.", "Misc", null, "");
         this.originalHardness = new Map();
         this.applied = false;
     }
