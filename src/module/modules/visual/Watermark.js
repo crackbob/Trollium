@@ -2,7 +2,14 @@ import Module from "../../module";
 
 export default class Watermark extends Module {
     constructor () {
-        super("Watermark", "Watermark showing client name.", "Visual", null, "")
+        super("Watermark", "Watermark showing client name.", "Visual", {
+            "Text": "Trollium"
+        }, "")
+    }
+
+    onSettingUpdate() {
+        let watermarkElement = document.querySelector(".trollium-overlay-title");
+        if(watermarkElement) watermarkElement.textContent = this.options["Text"];
     }
 
     onEnable() {
@@ -10,7 +17,7 @@ export default class Watermark extends Module {
         if (!watermarkElement) {
             watermarkElement = document.createElement("div");
             watermarkElement.className = "trollium-overlay-title";
-            watermarkElement.textContent = "Trollium";
+            watermarkElement.textContent = this.options["Text"];
             watermarkElement.style.position = "absolute";
             watermarkElement.style.top = "0";
             watermarkElement.style.left = "0";
