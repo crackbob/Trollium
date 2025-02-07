@@ -13,7 +13,7 @@ export default class IdentityCrisis extends Module {
     }
 
     onGameTick () {
-        const interval = this.options.Interval * 1000;
+        const interval = this.options.Interval;
         const currentTime = Date.now();
 
         if (this.skinQueue.length === 0) {
