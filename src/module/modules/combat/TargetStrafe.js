@@ -5,7 +5,10 @@ import gameUtils from "../../../utils/gameUtils";
 export default class TargetStrafe extends Module {
     constructor() {
         super("Target Strafe", "Allows you to strafe around the target while attacking player.", "Combat", {
-            "Radius": 1.5
+            "Lock-on Radius": 3,
+            "Spin Radius": 1.5,
+            "Spin Speed ": 0.1,
+            "Speed": 2
         }, "");
         this.angle = 0;
     }
@@ -19,24 +22,18 @@ export default class TargetStrafe extends Module {
             (target[2] - playerPos[2]) ** 2 
         );
 
-        if (distanceToTarget < 3.5 && gameUtils.lastKillauraAttack > (Date.now() - 200) && gameUtils.onGround()) {
+        if (distanceToTarget < parseFloat(this.options["Lock-on Radius"]) && gameUtils.lastKillauraAttack > (Date.now() - 200) && gameUtils.onGround()) {
 
             if (!gameUtils.touchingWall()) {
-                this.angle += 0.1;
+                this.angle += parseFloat(this.options["Spin Speed "]);
             }
 
-            const newX = target[0] + Math.cos(this.angle) * this.options.Radius;
-            const newZ = target[2] + Math.sin(this.angle) * this.options.Radius;
-
-            const speed = hooks.noa.serverSettings.walkingSpeed / 2;
-
-            if (hooks.noa.entities.getStatesList("movement")[0].vehicle.type == 1) {
-                speed = 8;
-            }
+            const newX = target[0] + Math.cos(this.angle) * parseFloat(this.options["Spin Radius"]);
+            const newZ = target[2] + Math.sin(this.angle) * parseFloat(this.options["Spin Radius"]);
 
             let playerPhysicsBody = hooks.noa.entities.getPhysicsBody(hooks.noa.playerEntity);
-            playerPhysicsBody.velocity[0] = (newX - playerPos[0]) * speed;
-            playerPhysicsBody.velocity[2] = (newZ - playerPos[2]) * speed;
+            playerPhysicsBody.velocity[0] = (newX - playerPos[0]) * parseFloat(this.options["Speed"]);
+            playerPhysicsBody.velocity[2] = (newZ - playerPos[2]) * parseFloat(this.options["Speed"]);
         }
     }
 };
