@@ -40,6 +40,7 @@ import AntiBan from "./modules/misc/AntiBan";
 import NoSlow from "./modules/movement/NoSlow";
 import IdentityCrisis from "./modules/misc/IdentityCrisis";
 import Twerk from "./modules/movement/Twerk";
+import Speed from "./modules/movement/Speed";
 
 export default {
     modules: {},
@@ -107,7 +108,8 @@ export default {
             new AntiBan(),
             new NoSlow(),
             new IdentityCrisis(),
-            new Twerk()
+            new Twerk(),
+            new Speed()
         );
 
         events.on("gameTick", () => {
