@@ -5,7 +5,7 @@ import Module from "../../module";
 
 export default class ESP extends Module {
     constructor () {
-        super("ESP", "See players through walls.", "Visual", "", "")
+        super("ESP", "See players through walls.", "Visual")
     }
 
     ESPMatList = []

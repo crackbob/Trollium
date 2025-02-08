@@ -20,6 +20,8 @@ export default class ModuleSettings {
                 this.addColorPicker(key);
             } else if (settingType === "boolean" || settingValue === "true" || settingValue === "false") {
                 this.addCheckbox(key);
+            } else if (settingType === "string") {
+                this.addStringInput(key);
             } else {
                 this.addNumberInput(key);
             }
@@ -75,6 +77,31 @@ export default class ModuleSettings {
             if (e.key === "Enter") {
                 input.blur();
             }
+        });
+
+        container.appendChild(label);
+        container.appendChild(input);
+        this.container.appendChild(container);
+        this.components.push(container);
+    }
+
+    addStringInput(name) {
+        const container = document.createElement("div");
+        container.className = "gui-setting-container";
+
+        const label = document.createElement("span");
+        label.className = "gui-setting-label";
+        label.textContent = name;
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "gui-text-input";
+        input.value = this.module.options[name];
+
+        input.addEventListener("input", () => {
+            const value = input.value.trim();
+            this.module.options[name] = value;
+            events.emit("setting.update", this.module);
         });
 
         container.appendChild(label);

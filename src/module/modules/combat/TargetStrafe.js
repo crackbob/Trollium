@@ -10,7 +10,7 @@ export default class TargetStrafe extends Module {
             "Spin Radius": 1.5,
             "Spin Speed ": 0.1,
             "Speed": 2
-        }, "");
+        });
         this.angle = 0;
     }
 

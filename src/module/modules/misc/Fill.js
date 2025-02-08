@@ -7,7 +7,7 @@ export default class Fill extends Module {
     constructor () {
         super("Fill", "Fill Blocks", "Misc", {
             "Radius": 3
-        }, "");
+        });
         this.delay = 300;
         this.index = 0;
         this.blockPositions = [];

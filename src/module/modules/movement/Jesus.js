@@ -4,7 +4,7 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class Jesus extends Module {
     constructor () {
-        super("Jesus", "Walk on water", "Movement", null, "")
+        super("Jesus", "Walk on water", "Movement", null)
     }
 
     onGameTick () {

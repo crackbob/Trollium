@@ -3,7 +3,7 @@ import hooks from "../../../hooks";
 
 export default class AntiRecoil extends Module {
     constructor () {
-        super("AntiRecoil", "Prevents gun from recoiling.", "Combat", null, "")
+        super("AntiRecoil", "Prevents gun from recoiling.", "Combat", null)
     }
 
     onGameTick () {

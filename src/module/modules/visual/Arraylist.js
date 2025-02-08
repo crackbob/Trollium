@@ -72,7 +72,7 @@ export default class ArrayList extends Module {
             this.arraylistContainer = document.createElement("div");
             this.arraylistContainer.style.flexDirection = "column";
             this.arraylistContainer.style.position = "absolute";
-            this.arraylistContainer.style.zIndex = "999999";
+            this.arraylistContainer.style.zIndex = "1000";
             this.arraylistContainer.style.display = "flex";
             this.arraylistContainer.style.right = "5px";
             this.arraylistContainer.style.top = "5px";

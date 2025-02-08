@@ -110,7 +110,7 @@ export default class Panel {
                 event.stopPropagation();
                 event.stopImmediatePropagation();
                 if (event.key === "Escape") {
-                    module.keybind = "";
+                    module.keybind = null;
                 } else {
                     module.keybind = String(event.code);
                 }

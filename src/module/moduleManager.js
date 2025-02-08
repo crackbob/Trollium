@@ -38,10 +38,13 @@ import Fill from "./modules/misc/Fill";
 import AntiSpike from "./modules/movement/AntiSpike";
 import AntiBan from "./modules/misc/AntiBan";
 import NoSlow from "./modules/movement/NoSlow";
+import IdentityCrisis from "./modules/misc/IdentityCrisis";
+import Twerk from "./modules/movement/Twerk";
+import Speed from "./modules/movement/Speed";
 
 export default {
     modules: {},
-    addModules: function (modules) {
+    addModules: function (...modules) {
         for(const module of modules) this.modules[module.name] = module;
     },
     addModule: function (module) {
@@ -68,7 +71,7 @@ export default {
     },
 
     init () {
-        this.addModules([
+        this.addModules(
             new ArrayList(),
             new BottomChat(),
             new ESP(),
@@ -103,8 +106,11 @@ export default {
             new Fill(),
             new AntiSpike(),
             new AntiBan(),
-            new NoSlow()
-        ]);
+            new NoSlow(),
+            new IdentityCrisis(),
+            new Twerk(),
+            new Speed()
+        );
 
         events.on("gameTick", () => {
             for (let name in this.modules) {

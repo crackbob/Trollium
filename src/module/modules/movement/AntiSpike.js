@@ -3,7 +3,7 @@ import hooks from "../../../hooks";
 
 export default class AntiSpike extends Module {
     constructor () {
-        super("AntiSpike", "Don't fall on spikes", "Movement", null, "")
+        super("AntiSpike", "Don't fall on spikes", "Movement", null)
     }
 
     onEnable () {

@@ -4,7 +4,7 @@ import gameUtils from "../../../utils/gameUtils";
 
 export default class Bhop extends Module {
     constructor () {
-        super("Bhop", "Hop like a bunny.", "Movement", null, "KeyG")
+        super("Bhop", "Hop like a bunny.", "Movement", null)
     }
 
     get playerMovement () {

@@ -3,7 +3,7 @@ import hooks from "../../../hooks";
 
 export default class NoSlow extends Module {
     constructor () {
-        super("NoSlow", "be fast", "Movement", null, "")
+        super("NoSlow", "be fast", "Movement", null)
     }
 
     onEnable () {
