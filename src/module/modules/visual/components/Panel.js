@@ -3,37 +3,76 @@ import ModuleSettings from "./ModuleSettings.js";
 export default class Panel {
     constructor(title, position = { top: "200px", left: "200px" }) {
         this.panel = document.createElement("div");
-        this.panel.className = "gui-panel";
+        this.panel.classList.add("gui-panel");
         this.panel.style.top = position.top;
         this.panel.style.left = position.left;
         
         this.header = document.createElement("div");
-        this.header.className = "gui-header";
+        this.header.classList.add("gui-header");
         this.header.textContent = title;
         this.panel.appendChild(this.header);
         
+        this.initDrag();
+        
         document.body.appendChild(this.panel);
         this.buttons = [];
-        this.setupDragHandling();
     }
 
-    setupDragHandling() {
-        let isDragging = false;
-        let offset = { x: 0, y: 0 };
+    initDrag() {
+        this.isDragging = false;
+        this.dragOffsetX = 0;
+        this.dragOffsetY = 0;
+        this.prevMouseX = 0;
+        this.targetRotation = 0;
+        this.currentRotation = 0;
+        this.rafId = null;
 
-        this.header.addEventListener("mousedown", (e) => {
-            isDragging = true;
-            offset.x = e.clientX - this.panel.offsetLeft;
-            offset.y = e.clientY - this.panel.offsetTop;
-        });
+        const onMouseDown = (e) => {
+            this.isDragging = true;
+            this.dragOffsetX = e.clientX - this.panel.offsetLeft;
+            this.dragOffsetY = e.clientY - this.panel.offsetTop;
+            this.panel.classList.add('dragging');
+            this.panel.style.transition = "none";
+            this.targetRotation = 0;
+            this.currentRotation = 0;
+            this.prevMouseX = e.clientX;
+            if (!this.rafId) {
+                this.updateRotation();
+            }
+        };
 
-        document.addEventListener("mousemove", (e) => {
-            if (!isDragging) return;
-            this.panel.style.left = (e.clientX - offset.x) + "px";
-            this.panel.style.top = (e.clientY - offset.y) + "px";
-        });
+        const onMouseMove = (e) => {
+            if (!this.isDragging) return;
+            this.panel.style.left = (e.clientX - this.dragOffsetX) + "px";
+            this.panel.style.top = (e.clientY - this.dragOffsetY) + "px";
+            const dx = e.clientX - this.prevMouseX;
+            this.targetRotation += dx * 0.2;
+            this.targetRotation = Math.max(Math.min(this.targetRotation, 5), -5);
+            this.prevMouseX = e.clientX;
+        };
 
-        document.addEventListener("mouseup", () => isDragging = false);
+        const onMouseUp = () => {
+            if (this.isDragging) {
+                this.isDragging = false;
+                this.panel.classList.remove('dragging');
+                this.targetRotation = 0;
+            }
+        };
+
+        this.header.addEventListener('mousedown', onMouseDown);
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    }
+
+    updateRotation() {
+        const smoothing = 0.15;
+        this.currentRotation += (this.targetRotation - this.currentRotation) * smoothing;
+        this.panel.style.transform = "rotate(" + this.currentRotation.toFixed(2) + "deg)";
+        if (Math.abs(this.targetRotation - this.currentRotation) > 0.01 || this.isDragging) {
+            this.rafId = requestAnimationFrame(this.updateRotation.bind(this));
+        } else {
+            this.rafId = null;
+        }
     }
 
     addButton(module) {
