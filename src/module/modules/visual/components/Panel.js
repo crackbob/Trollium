@@ -27,51 +27,50 @@ export default class Panel {
         this.currentRotation = 0;
         this.rafId = null;
 
-        const onMouseDown = (e) => {
-            this.isDragging = true;
-            this.dragOffsetX = e.clientX - this.panel.offsetLeft;
-            this.dragOffsetY = e.clientY - this.panel.offsetTop;
-            this.panel.classList.add('dragging');
-            this.panel.style.transition = "none";
-            this.targetRotation = 0;
-            this.currentRotation = 0;
-            this.prevMouseX = e.clientX;
-            if (!this.rafId) {
-                this.updateRotation();
-            }
-        };
-
-        const onMouseMove = (e) => {
-            if (!this.isDragging) return;
-            this.panel.style.left = (e.clientX - this.dragOffsetX) + "px";
-            this.panel.style.top = (e.clientY - this.dragOffsetY) + "px";
-            const dx = e.clientX - this.prevMouseX;
-            this.targetRotation += dx * 0.2;
-            this.targetRotation = Math.max(Math.min(this.targetRotation, 5), -5);
-            this.prevMouseX = e.clientX;
-        };
-
-        const onMouseUp = () => {
-            if (this.isDragging) {
-                this.isDragging = false;
-                this.panel.classList.remove('dragging');
-                this.targetRotation = 0;
-            }
-        };
-
-        this.header.addEventListener('mousedown', onMouseDown);
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
+        this.header.addEventListener('mousedown', this.handleMouseDown);
+        document.addEventListener('mousemove', this.handleMouseMove);
+        document.addEventListener('mouseup', this.handleMouseUp);
     }
 
-    updateRotation() {
+    updateRotation = () => {
         const smoothing = 0.15;
         this.currentRotation += (this.targetRotation - this.currentRotation) * smoothing;
         this.panel.style.transform = "rotate(" + this.currentRotation.toFixed(2) + "deg)";
         if (Math.abs(this.targetRotation - this.currentRotation) > 0.01 || this.isDragging) {
-            this.rafId = requestAnimationFrame(this.updateRotation.bind(this));
+            this.rafId = requestAnimationFrame(this.updateRotation);
         } else {
             this.rafId = null;
+        }
+    }
+
+    handleMouseDown = (e) => {
+        this.isDragging = true;
+        this.dragOffsetX = e.clientX - this.panel.offsetLeft;
+        this.dragOffsetY = e.clientY - this.panel.offsetTop;
+        this.panel.classList.add('dragging');
+        this.panel.style.transition = "none";
+        this.targetRotation = 0;
+        this.currentRotation = 0;
+        this.prevMouseX = e.clientX;
+        if (!this.rafId) this.updateRotation();
+    }
+
+    handleMouseMove = (e) => {
+        if (!this.isDragging) return;
+        this.panel.style.left = (e.clientX - this.dragOffsetX) + "px";
+        this.panel.style.top = (e.clientY - this.dragOffsetY) + "px";
+        const dx = e.clientX - this.prevMouseX;
+        const intensity = this.getAnimationIntensity();
+        this.targetRotation += dx * 0.2 * intensity;
+        this.targetRotation = Math.max(Math.min(this.targetRotation, 5 * intensity), -5 * intensity);
+        this.prevMouseX = e.clientX;
+    }
+
+    handleMouseUp = () => {
+        if (this.isDragging) {
+            this.isDragging = false;
+            this.panel.classList.remove('dragging');
+            this.targetRotation = 0;
         }
     }
 
@@ -130,5 +129,9 @@ export default class Panel {
 
     hide() {
         this.panel.style.display = "none";
+    }
+
+    getAnimationIntensity() {
+        return parseFloat(getComputedStyle(document.body).getPropertyValue('--animation-scale')) || 1;
     }
 }

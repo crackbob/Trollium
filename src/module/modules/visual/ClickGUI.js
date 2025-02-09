@@ -14,7 +14,8 @@ export default class ClickGUI extends Module {
             "Header Color": "rgb(0, 0, 0, 0.85)",
             "Panel Color": "rgb(18 18 18)",
             "Text Color": "#ffffff",
-            "Enable Animations": true
+            "Enable Animations": true,
+            "Animation Intensity": 1
         }, "ShiftRight");
 
         this.GUILoaded = false;
@@ -39,6 +40,7 @@ export default class ClickGUI extends Module {
         document.body.style.setProperty('--header-bg', this.options["Header Color"]);
         document.body.style.setProperty('--panel-bg', this.options["Panel Color"]);
         document.body.style.setProperty('--text-color', this.options["Text Color"]);
+        document.body.style.setProperty('--animation-scale', this.options["Animation Intensity"]);
     }
 
     onEnable() {

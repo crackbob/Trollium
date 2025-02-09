@@ -13,6 +13,7 @@
     --header-text-size: 25px;
     --button-text-size: 20px;
     --setting-text-size: 15px;
+    --animation-scale: 1;
 }
 
 .gui-panel {
@@ -22,6 +23,7 @@
     border-radius: 8px;
     background-color: var(--panel-bg);
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transform-style: preserve-3d;
     font-family: 'Product Sans', sans-serif;
     color: var(--text-color);
     overflow: hidden;
@@ -153,27 +155,31 @@
 }
 
 .with-animations .gui-panel {
-    animation: fadeInScale 0.3s ease-out;
+    animation: fadeInScale 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
 @keyframes fadeInScale {
-    from {
+    0% {
         opacity: 0;
-        transform: scale(0.9);
+        transform: scale(calc(1 - 0.2 * var(--animation-scale)));
     }
-    to {
+    60% {
+        opacity: 1;
+        transform: scale(calc(1 + 0.1 * var(--animation-scale)));
+    }
+    100% {
         opacity: 1;
         transform: scale(1);
     }
 }
 
 .with-animations .gui-background {
-    animation: fadeIn 0.3s ease-out;
+    animation: fadeIn 0.5s ease-out;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    0% { opacity: 0; transform: scale(calc(1 + 0.05 * var(--animation-scale))); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
 .with-animations .gui-button {
@@ -181,21 +187,26 @@
 }
 
 .with-animations .gui-button:hover {
-    transform: scale(1.01);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .with-animations .gui-setting-container {
     will-change: transform, opacity;
     transform-origin: top;
-    animation: slideDown 0.25s ease-out forwards;
+    animation: slideDown 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
 }
 
 @keyframes slideDown {
-    from {
+    0% {
         opacity: 0;
-        transform: scaleY(0.8);
+        transform: scaleY(calc(1 - 0.5 * var(--animation-scale)));
     }
-    to {
+    70% {
+        opacity: 1;
+        transform: scaleY(calc(1 + 0.1 * var(--animation-scale)));
+    }
+    100% {
         opacity: 1;
         transform: scaleY(1);
     }
