@@ -18,9 +18,5 @@ export default {
 
     get changeSkin () {
         return this.findPacket(packetSchema => packetSchema?.fields?.[0]?.name == "partType");
-    },
-
-    get setSelectedSlotIndex () {
-        return 28;
     }
 }

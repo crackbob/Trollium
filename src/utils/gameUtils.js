@@ -87,8 +87,8 @@ export default {
     },
 
     selectInventorySlot(index) {
-        hooks.noa.ents.getInventoryState(hooks.noa.playerEntity).inventory.setSelectedSlotIndex(index);
-        hooks.sendPacket(packets.setSelectedSlotIndex, index);
+        let inventorySlots = document.getElementsByClassName("HotBarGameItemsContainer")[0].children;
+        Object.values(inventorySlots[index])[1].onPointerDown();
     },
 
     getPlayerName(id) {
