@@ -113,5 +113,19 @@ export default {
         }
     },
 
+    doAttack2 (id, lookPos) {
+        let tickCounter = hooks.noa.bloxd.client.msgHandler.colyRoom.state.tickCounter;
+        let selectedItem = hooks.noa.ents.getInventoryState(hooks.noa.playerEntity).inventory.getItemAtSelectedSlot();
+
+        hooks.sendPacket(parseInt(packets.doAttack), {
+            eId: id,
+            bodyPart: "BodyMesh",
+            dirFacing: lookPos,
+            heldName: selectedItem,
+            v: hooks.attackValidator,
+            tickCounter: tickCounter
+        });
+    },
+
     "lastKillauraAttack": 0
 };

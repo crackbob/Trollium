@@ -35,5 +35,9 @@ export default {
             }
             return _publish.apply(this, arguments);
         }
+
+        let module = this.findModule("push({message");
+        let propKey = Object.keys(module).find(key => Number.isInteger(module[key]))
+        this.attackValidator = module[propKey];
     }
 }

@@ -18,5 +18,9 @@ export default {
 
     get changeSkin () {
         return this.findPacket(packetSchema => packetSchema?.fields?.[0]?.name == "partType");
+    },
+
+    get doAttack () {
+        return this.findPacket(packetSchema => packetSchema?.fields?.[5]?.name == "tickCounter");
     }
 }
