@@ -221,63 +221,28 @@ export default class ClickGUI extends Module {
         
         // Generate all modules list for search
         this.allModules = Object.values(moduleManager.modules);
-        
-        // Add escape key handler to exit search mode
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape" && document.body.classList.contains("search-mode")) {
-                this.searchInput.value = "";
-                clearButton.style.display = "none";
-                this.searchResults.classList.remove("visible");
-                this.searchResults.style.display = "none";
-                this.exitSearchMode();
-            }
-        });
     }
     
     setupSearchKeyboardNavigation() {
-        let currentFocusIndex = -1;
-        
         this.searchInput.addEventListener("keydown", (e) => {
-            const results = this.searchResults.querySelectorAll(".gui-search-result");
-            
-            // Handle arrow keys for navigation
-            if (e.key === "ArrowDown") {
+            // Only keep Escape key to close search
+            if (e.key === "Escape") {
+                // Close search results instantly
+                this.searchResults.style.display = "none";
+                
+                // If in search mode, exit immediately
+                if (document.body.classList.contains("search-mode")) {
+                    this.exitSearchMode(true);
+                }
+                
                 e.preventDefault();
-                if (results.length > 0) {
-                    currentFocusIndex = (currentFocusIndex + 1) % results.length;
-                    this.focusSearchResult(results, currentFocusIndex);
-                }
-            } else if (e.key === "ArrowUp") {
-                e.preventDefault();
-                if (results.length > 0) {
-                    currentFocusIndex = currentFocusIndex <= 0 ? results.length - 1 : currentFocusIndex - 1;
-                    this.focusSearchResult(results, currentFocusIndex);
-                }
-            } else if (e.key === "Enter") {
-                // Toggle the currently focused module
-                if (currentFocusIndex >= 0 && currentFocusIndex < results.length) {
-                    results[currentFocusIndex].click();
-                }
-            } else if (e.key === "Escape") {
-                // Close search results
-                this.searchResults.classList.remove("visible");
-                setTimeout(() => {
-                    this.searchResults.style.display = "none";
-                    currentFocusIndex = -1;
-                }, 300);
             }
         });
-    }
-    
-    focusSearchResult(results, index) {
-        // Remove focus from all results
-        results.forEach(result => result.classList.remove("focused"));
         
-        // Add focus to the selected result
-        results[index].classList.add("focused");
-        
-        // Scroll the result into view if needed
-        results[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
+        // Make search instant on input
+        this.searchInput.addEventListener("input", () => {
+            this.performSearch();
+        });
     }
     
     performSearch() {
@@ -459,11 +424,14 @@ export default class ClickGUI extends Module {
         // Close search results when clicking outside
         document.addEventListener("click", (e) => {
             if (!this.searchContainer.contains(e.target) && this.searchResults.style.display !== "none") {
-                this.searchResults.classList.remove("visible");
-                setTimeout(() => {
+                // Use the exitSearchMode with instant=true to immediately exit search mode
+                if (document.body.classList.contains("search-mode")) {
+                    this.exitSearchMode(true);
+                } else {
+                    // Just hide search results immediately
                     this.searchResults.style.display = "none";
                     this.searchInput.value = "";
-                }, 300);
+                }
             }
         });
         
@@ -508,10 +476,55 @@ export default class ClickGUI extends Module {
             }
         });
         
-        // Add keyboard shortcut for closing the GUI
+        // Simplified keyboard handler - only Escape to close and directly type to search
         document.addEventListener("keydown", (e) => {
-            if (this.isEnabled && e.key === "Escape") {
-                this.toggle();
+            if (!this.isEnabled) return;
+            
+            // Check if user is actively typing in an input field, textarea, etc.
+            const activeElement = document.activeElement;
+            const isTypingInInput = activeElement.tagName === "INPUT" || 
+                                   activeElement.tagName === "TEXTAREA" || 
+                                   activeElement.isContentEditable ||
+                                   activeElement.classList.contains("gui-text-input") ||
+                                   activeElement.classList.contains("gui-color-input");
+            
+            // If user is typing in an input field that's not the search input, don't intercept keys
+            if (isTypingInInput && activeElement !== this.searchInput) {
+                return; // Let the browser handle the key event normally
+            }
+            
+            // Only handle these keys when not typing in any input field (except search)
+            if (!isTypingInInput || activeElement === this.searchInput) {
+                if (e.key === "Escape") {
+                    // If in search, close search first
+                    if (document.body.classList.contains("search-mode")) {
+                        this.exitSearchMode(true);
+                        this.searchInput.value = "";
+                        e.preventDefault();
+                        return;
+                    }
+                    
+                    // Otherwise close the GUI
+                    this.toggle();
+                    e.preventDefault();
+                    return;
+                }
+            }
+            
+            // Only intercept typing for search if not already in an input element
+            if (!isTypingInInput) {
+                // Ignore modifier keys, tab, enter, etc.
+                if (e.ctrlKey || e.altKey || e.metaKey) return;
+                if (["Control", "Alt", "Shift", "Meta", "Tab", "CapsLock", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"].includes(e.key)) return;
+                
+                // For any other key, focus the search and add the character
+                if (e.key.length === 1) { // Only single characters
+                    this.searchInput.focus();
+                    this.searchInput.value = e.key;
+                    this.enterSearchMode();
+                    this.performSearch();
+                    e.preventDefault();
+                }
             }
         });
     }
@@ -528,6 +541,19 @@ export default class ClickGUI extends Module {
     onDisable() {
         // Animate the closing sequence
         this.animateClosingSequence();
+        
+        // Clean up any open module settings
+        if (this.panels) {
+            this.panels.forEach(panel => {
+                if (panel.buttons) {
+                    panel.buttons.forEach(button => {
+                        if (button.moduleSettings && button.moduleSettings.cleanup) {
+                            button.moduleSettings.cleanup();
+                        }
+                    });
+                }
+            });
+        }
     }
     
     animateClosingSequence() {
@@ -552,118 +578,21 @@ export default class ClickGUI extends Module {
     }
 
     setupScrollAnimations() {
-        // Apply smooth scroll behavior to all scrollable containers
+        // Simplify the scrolling setup - just ensure scrollbars are hidden
         const scrollableContainers = document.querySelectorAll('.gui-button-container, .gui-search-results, .module-settings, .gui-settings-wrapper');
         
+        // Apply simple scrolling to all containers
         scrollableContainers.forEach(container => {
-            container.classList.add('smooth-scroll');
+            // Apply standard classes for scrolling
+            container.classList.add('scrollable');
             
-            // Create scroll indicator
-            const scrollIndicator = document.createElement('div');
-            scrollIndicator.className = 'scroll-indicator';
-            container.appendChild(scrollIndicator);
-            
-            // Add scroll event listener
-            container.addEventListener('scroll', this.debounce(() => {
-                // Update scroll indicator position and size
-                this.updateScrollIndicator(container, scrollIndicator);
-                
-                // Add active scrolling class temporarily
-                container.classList.add('scrolling-active');
-                setTimeout(() => container.classList.remove('scrolling-active'), 1000);
-                
-                // Apply staggered reveal to visible elements
-                this.revealVisibleElements(container);
-            }, 10));
-            
-            // Initialize scroll indicator
-            this.updateScrollIndicator(container, scrollIndicator);
-            
-            // Store wheel event handler reference
-            const wheelHandler = this.smoothScrollHandler.bind(this, container);
-            container.addEventListener('wheel', wheelHandler, { passive: false });
-            
-            // Track these to clean up later if needed
-            this.scrollObservers.push({
-                container,
-                indicator: scrollIndicator,
-                wheelHandler
-            });
+            // Hide scrollbars
+            container.style.overflowY = 'auto';
+            container.style.scrollbarWidth = 'none';
+            container.style.msOverflowStyle = 'none';
         });
     }
-    
-    updateScrollIndicator(container, indicator) {
-        const { scrollTop, scrollHeight, clientHeight } = container;
-        const scrollPercent = scrollTop / (scrollHeight - clientHeight);
-        const indicatorHeight = Math.max(30, (clientHeight / scrollHeight) * clientHeight);
-        
-        indicator.style.height = `${indicatorHeight}px`;
-        indicator.style.top = `${scrollPercent * (clientHeight - indicatorHeight)}px`;
-        
-        // Show indicator only if container is scrollable
-        indicator.style.opacity = scrollHeight > clientHeight ? '1' : '0';
-    }
-    
-    smoothScrollHandler(container, e) {
-        if (!this.options["Enable Animations"]) return;
-        
-        e.preventDefault();
-        
-        const scrollAmount = e.deltaY * 0.5; // Adjust the multiplier to control smoothness
-        const smoothness = parseFloat(this.options["Scrolling Smoothness"]);
-        
-        // Use requestAnimationFrame for smoother scrolling
-        this.smoothScroll(container, scrollAmount, smoothness);
-    }
-    
-    smoothScroll(element, scrollAmount, smoothness) {
-        const startPosition = element.scrollTop;
-        const targetPosition = startPosition + scrollAmount;
-        const startTime = performance.now();
-        const duration = 400 * smoothness; // Adjust duration based on smoothness setting
-        
-        const scrollStep = (timestamp) => {
-            const elapsed = timestamp - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            
-            // Ease-out function for natural deceleration
-            const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-            
-            element.scrollTop = startPosition + (targetPosition - startPosition) * easeOutCubic;
-            
-            if (progress < 1) {
-                requestAnimationFrame(scrollStep);
-            }
-        };
-        
-        requestAnimationFrame(scrollStep);
-    }
-    
-    revealVisibleElements(container) {
-        // Find all buttons or search results in the container
-        const items = container.querySelectorAll('.gui-button, .gui-search-result, .gui-setting-container');
-        
-        items.forEach((item, index) => {
-            // Check if element is visible in the viewport
-            const rect = item.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-            
-            const isVisible = (
-                rect.top >= containerRect.top &&
-                rect.bottom <= containerRect.bottom
-            );
-                    
-                    if (isVisible) {
-                item.style.setProperty('--index', index % 20);
-                
-                // Add appear class if not already visible
-                if (!item.classList.contains('appeared')) {
-                    item.classList.add('appeared');
-                }
-            }
-        });
-    }
-    
+
     setupIntersectionObservers() {
         // We're no longer using animations for elements when they come into view
         // This entire method can be simplified to avoid flashing
@@ -742,22 +671,34 @@ export default class ClickGUI extends Module {
     }
 
     // Exit search mode - show everything again
-    exitSearchMode() {
+    exitSearchMode(instant = false) {
         if (this.searchInput.value.length === 0) {
-            // Add transition class first
-            document.body.classList.add("search-mode-exit");
-            
-            // Remove search mode
-            document.body.classList.remove("search-mode");
-            
-            // Hide search elements
-            this.searchResults.classList.remove("visible");
-            this.searchResults.style.display = "none";
-            
-            // Remove transition class after animation completes
-            setTimeout(() => {
+            if (instant) {
+                // Skip animations entirely for instant mode
+                document.body.classList.remove("search-mode");
+                document.body.classList.remove("search-mode-enter");
                 document.body.classList.remove("search-mode-exit");
-            }, 200);
+                
+                // Hide search elements immediately
+                this.searchResults.classList.remove("visible");
+                this.searchResults.style.display = "none";
+            } else {
+                // Normal animated exit
+                // Add transition class first
+                document.body.classList.add("search-mode-exit");
+                
+                // Remove search mode
+                document.body.classList.remove("search-mode");
+                
+                // Hide search elements
+                this.searchResults.classList.remove("visible");
+                this.searchResults.style.display = "none";
+                
+                // Remove transition class after animation completes
+                setTimeout(() => {
+                    document.body.classList.remove("search-mode-exit");
+                }, 200);
+            }
         }
     }
 }

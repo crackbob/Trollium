@@ -16,8 +16,17 @@ export default class ModuleSettings {
         
         // Create a wrapper for the settings to improve scrolling
         this.settingsWrapper = document.createElement("div");
-        this.settingsWrapper.className = "module-settings";
+        this.settingsWrapper.className = "module-settings scrollable";
         this.settingsWrapper.id = this.settingsId;
+        
+        // Apply direct styles to ensure scrolling works
+        this.settingsWrapper.style.maxHeight = "300px";
+        this.settingsWrapper.style.overflow = "auto";
+        this.settingsWrapper.style.overflowX = "hidden";
+        
+        // Hide scrollbars
+        this.settingsWrapper.style.scrollbarWidth = "none";
+        this.settingsWrapper.style.msOverflowStyle = "none";
         
         // Create settings container inside wrapper
         const settingsContainer = document.createElement("div");
@@ -59,83 +68,13 @@ export default class ModuleSettings {
         this.settingsWrapper.style.display = "none";
         this.initialized = true;
         
-        // Setup ultra smooth scrolling
-        this.setupUltraSmoothScrolling();
-    }
-    
-    // Setup smooth scrolling with no scrollbar
-    setupUltraSmoothScrolling() {
-        if (!this.settingsWrapper) return;
-        
-        // Apply improved scroll properties
-        this.settingsWrapper.style.overflowY = 'auto';
-        this.settingsWrapper.style.scrollBehavior = 'smooth';
-        this.settingsWrapper.style.scrollbarWidth = 'none'; // Firefox
-        this.settingsWrapper.style.msOverflowStyle = 'none'; // IE/Edge
-        
-        // Smooth scrolling implementation
-        let isScrolling = false;
-        let startY = 0;
-        let scrollTop = 0;
-        let rafId = null;
-        
-        const startScroll = (y) => {
-            isScrolling = true;
-            startY = y;
-            scrollTop = this.settingsWrapper.scrollTop;
-            cancelAnimationFrame(rafId);
-        };
-        
-        const moveScroll = (y) => {
-            if (!isScrolling) return;
-            
-            const delta = startY - y;
-            const targetScroll = scrollTop + delta;
-            animateScroll(targetScroll);
-        };
-        
-        const endScroll = () => {
-            isScrolling = false;
-        };
-        
-        const animateScroll = (targetPos) => {
-            const currentPos = this.settingsWrapper.scrollTop;
-            // Use a very smooth easing function
-            const ease = 0.2;
-            const newPos = currentPos + (targetPos - currentPos) * ease;
-            
-            this.settingsWrapper.scrollTop = newPos;
-            
-            // Continue animation if we're not close enough
-            if (Math.abs(targetPos - newPos) > 0.5) {
-                rafId = requestAnimationFrame(() => animateScroll(targetPos));
+        // Add click outside handler that keeps GUI open
+        document.addEventListener("click", this.handleOutsideClick = (e) => {
+            if (this.isOpen && !this.settingsWrapper.contains(e.target) && !this.container.contains(e.target)) {
+                // If we clicked outside the settings, close them but don't close GUI
+                e.stopPropagation(); // Prevent event from closing the GUI
+                this.toggle(); // Close the settings
             }
-        };
-        
-        // Improved wheel event for smoother scrolling
-        this.settingsWrapper.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            
-            // Smooth scroll with animation frame
-            const currentPos = this.settingsWrapper.scrollTop;
-            const targetPos = currentPos + e.deltaY;
-            
-            // Use smooth animation
-            animateScroll(targetPos);
-        }, { passive: false });
-        
-        // Touch events for mobile with smoother scrolling
-        this.settingsWrapper.addEventListener('touchstart', (e) => {
-            startScroll(e.touches[0].clientY);
-        }, { passive: true });
-        
-        this.settingsWrapper.addEventListener('touchmove', (e) => {
-            moveScroll(e.touches[0].clientY);
-            e.preventDefault();
-        }, { passive: false });
-        
-        this.settingsWrapper.addEventListener('touchend', () => {
-            endScroll();
         });
     }
 
@@ -341,6 +280,13 @@ export default class ModuleSettings {
         } catch (e) {
             console.error("RGB to HEX conversion error:", e);
             return "#40BEFF"; // Fallback on error
+        }
+    }
+
+    // Add method to clean up event listeners when module is destroyed
+    cleanup() {
+        if (this.handleOutsideClick) {
+            document.removeEventListener("click", this.handleOutsideClick);
         }
     }
 }

@@ -51,6 +51,15 @@ export default {
         this.modules[module.name] = module;
     },
     handleKeyPress: function (key) {
+        // Skip all keybinds if ClickGUI is open
+        if (this.modules["ClickGUI"] && this.modules["ClickGUI"].isEnabled) {
+            // Only allow keybinds for ClickGUI itself (to close it)
+            if (this.modules["ClickGUI"].keybind === key) {
+                this.modules["ClickGUI"].toggle();
+            }
+            return; // Exit early, don't process other keybinds
+        }
+
         for (let name in this.modules) {
             let module = this.modules[name];
 

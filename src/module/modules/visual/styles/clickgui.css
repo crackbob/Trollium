@@ -727,8 +727,9 @@
 }
 
 .module-settings-exit {
-    animation: settingsExitClean 200ms var(--accelerate-easing) forwards;
+    animation: settingsExitClean 200ms var(--standard-easing) forwards;
     will-change: opacity, max-height, transform;
+    pointer-events: none; /* Prevent interaction during exit animation */
 }
 
 @keyframes settingsEnterClean {
@@ -747,8 +748,12 @@
 @keyframes settingsExitClean {
     0% {
         opacity: 1;
-        max-height: 300px;
+    max-height: 300px;
         transform: translateY(0);
+    }
+    50% {
+        opacity: 0.5;
+        transform: translateY(-3px);
     }
     100% {
         opacity: 0;
@@ -759,19 +764,7 @@
 
 /* Smooth scroll indicator */
 .scroll-indicator {
-    position: absolute;
-    right: 0;
-    width: var(--scroller-size);
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    opacity: 0;
-    transition: opacity 300ms var(--standard-easing);
-    z-index: 10;
-    pointer-events: none;
-}
-
-.scrollable-container:hover .scroll-indicator {
-    opacity: 1;
+    display: none !important;
 }
 
 /* Beautiful focus effect for interactive elements */
@@ -945,13 +938,6 @@
 
 .appeared {
     animation: none !important;
-}
-
-/* Fix search result focus style */
-.gui-search-result.focused {
-    background: rgba(255, 255, 255, 0.1) !important;
-    border-left: 3px solid rgba(255, 255, 255, 0.3);
-    padding-left: 12px;
 }
 
 /* Additional styling for module settings */
@@ -1199,7 +1185,7 @@ body.search-mode .gui-search-container {
     perspective: 1000px;
 }
 
-/* Hide webkit scrollbars */
+/* Hide WebKit scrollbars */
 .module-settings::-webkit-scrollbar,
 .gui-button-container::-webkit-scrollbar,
 .gui-search-results::-webkit-scrollbar,
@@ -1236,4 +1222,86 @@ body.search-mode .gui-search-container {
     transition: none !important;
     opacity: 1 !important;
     transform: none !important;
+}
+
+/* Simple scrollable containers with hidden scrollbars */
+.module-settings,
+.gui-button-container,
+.gui-search-results,
+.gui-settings-wrapper {
+    overflow-y: auto;
+    overflow-x: hidden;
+    
+    /* Hide scrollbars across browsers */
+    -ms-overflow-style: none;  /* Internet Explorer and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide WebKit scrollbar */
+.module-settings::-webkit-scrollbar,
+.gui-button-container::-webkit-scrollbar,
+.gui-search-results::-webkit-scrollbar,
+.gui-settings-wrapper::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+/* Reset any complex scrolling styles */
+.smooth-scroll,
+.scrollable-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.smooth-scroll::-webkit-scrollbar,
+.scrollable-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Clean module settings for simple scrolling */
+.module-settings {
+    max-height: 300px;
+    padding: 4px 5px;
+    background: var(--panel-bg);
+    border-radius: 4px;
+    margin-top: 2px;
+}
+
+/* Make sure scrolling works reliably */
+.scrollable {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+}
+
+.scrollable::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Make module settings work properly */
+.module-settings {
+    max-height: 300px !important;
+    overflow-y: auto !important;
+    padding: 4px 5px;
+    background: var(--panel-bg);
+    border-radius: 4px;
+}
+
+/* Make sure module settings container doesn't overflow */
+.module-settings-container {
+    padding: 2px;
+    overflow: visible;
+}
+
+/* Hide all scrollbars but ensure scrolling works */
+*::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
 }
