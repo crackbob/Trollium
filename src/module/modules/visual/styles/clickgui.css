@@ -1,43 +1,69 @@
-@font-face {
-    font-family: "Product Sans";
-    src: url(https://fonts.gstatic.com/s/productsans/v19/pxiDypQkot1TnFhsFMOfGShVF9eO.woff2);
-}
+/* Font imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fontawesome:wght@400&display=swap');
 
 :root {
     --trollium-accent-color: linear-gradient(90deg, rgb(64, 190, 255) 0%, rgb(129, 225, 255) 100%);
     --button-color: rgb(40, 40, 40, 0.9);
     --hover-color: rgb(50, 50, 50, 0.9);
-    --panel-bg: rgb(34, 34, 34, 0.85);
-    --panel-bg: rgb(10, 10, 10, 0.85);
+    --panel-bg: rgb(18, 18, 18, 0.95);
+    --header-bg: rgb(0, 0, 0, 0.85);
     --text-color: #ffffff;
-    --header-text-size: 25px;
-    --button-text-size: 20px;
+    --header-text-size: 24px;
+    --button-text-size: 18px;
     --setting-text-size: 15px;
     --animation-scale: 1;
+    --border-radius: 6px;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --transition-timing: cubic-bezier(0.19, 1, 0.22, 1); /* Expo out easing */
+    --spring-easing: cubic-bezier(0.34, 1.56, 0.64, 1); /* Custom spring-like easing */
+    --standard-easing: cubic-bezier(0.4, 0, 0.2, 1); /* Material standard easing */
+    --decelerate-easing: cubic-bezier(0, 0, 0.2, 1); /* Material deceleration easing */
+    --accelerate-easing: cubic-bezier(0.4, 0, 1, 1); /* Material acceleration easing */
+    --hover-transition-duration: 150ms; /* Further reduced from 200ms */
+    --panel-appear-duration: 350ms; /* Further reduced from 400ms */
+    --button-appear-duration: 300ms; /* Further reduced from 350ms */
+    --setting-appear-duration: 250ms; /* Further reduced from 300ms */
+    --search-appear-duration: 300ms; /* Further reduced from 350ms */
+    --glow-color: rgba(64, 190, 255, 0.4);
+    --scroller-size: 4px;
+    --blur-intensity: 10px;
+    --tooltip-bg: rgba(0, 0, 0, 0.8);
 }
 
 .gui-panel {
     position: fixed;
     z-index: 1000;
-    width: 200px;
-    border-radius: 8px;
+    width: 205px;
+    border-radius: var(--border-radius);
     background-color: var(--panel-bg);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 24px var(--shadow-color),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                0 0 40px rgba(0, 0, 0, 0.2);
     transform-style: preserve-3d;
-    font-family: 'Product Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     color: var(--text-color);
     overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(var(--blur-intensity));
+    will-change: transform, opacity;
+    transform: perspective(1200px);
 }
 
 .gui-header {
     background-color: var(--header-bg);
-    height: 40px;
-    font-weight: 900;
+    height: 42px;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: var(--header-text-size);
     cursor: grab;
+    backdrop-filter: blur(5px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    letter-spacing: 0.5px;
+    will-change: transform;
 }
 
 .gui-header:active {
@@ -48,79 +74,144 @@
     height: 35px;
     display: flex;
     align-items: center;
-    padding-left: 10px;
+    justify-content: center;
     box-sizing: border-box;
     cursor: pointer;
-    border-radius: 0;
-    transition: all 0.3s;
     font-size: var(--button-text-size);
-    font-weight: 200;
+    font-weight: 400;
     outline: none;
     background: var(--button-color);
     color: var(--text-color);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 0.3px;
+    will-change: transform, background-color, box-shadow;
+    transition: transform var(--hover-transition-duration) var(--spring-easing),
+                background-color var(--hover-transition-duration) var(--standard-easing),
+                box-shadow var(--hover-transition-duration) var(--standard-easing);
 }
 
 .gui-button.enabled {
     background: var(--trollium-accent-color);
+    font-weight: 500;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 16px var(--glow-color);
 }
 
 .gui-button:not(.enabled):hover {
     background: var(--hover-color);
+    transform: none;
+    box-shadow: none;
 }
 
 .gui-background {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     z-index: 999;
     height: 100%;
     width: 100%;
-    backdrop-filter: blur(15px);
-    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(0px);
+    background: rgba(0, 0, 0, 0);
+    transition: backdrop-filter 600ms var(--decelerate-easing),
+                background-color 600ms var(--decelerate-easing);
+    will-change: backdrop-filter, background-color;
 }
 
+/* Completely redesigned settings UI */
 .gui-setting-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: var(--panel-bg);
-    padding: 2px;
+    padding: 10px 12px;
+    margin: 2px 0;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    opacity: 1;
+    transition: none;
+}
+
+.gui-setting-container:last-child {
+    border-bottom: none;
 }
 
 .gui-setting-label {
     font-size: var(--setting-text-size);
-    margin-left: 10px;
-    font-weight: 300;
+    font-weight: 500;
     color: var(--text-color);
+    opacity: 0.9;
+    user-select: none;
+    flex: 1;
 }
 
+/* Enhanced checkbox design */
 .gui-checkbox {
-    width: 15px;
-    height: 15px;
+    width: 18px;
+    height: 18px;
     border-radius: 4px;
-    background: var(--button-color);
+    background: rgba(255, 255, 255, 0.1);
     position: relative;
-    margin: 8px;
+    margin: 4px;
     cursor: pointer;
-    transition: background 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 300ms var(--spring-easing);
+    will-change: transform, background, box-shadow, border-color;
 }
 
 .gui-checkbox.enabled {
     background: var(--trollium-accent-color);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+    box-shadow: 0 0 8px var(--glow-color);
 }
 
+.gui-checkbox.enabled::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 6px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+    animation: checkmark-appear 250ms var(--spring-easing) forwards;
+    transform-origin: center;
+}
+
+@keyframes checkmark-appear {
+    from { transform: rotate(45deg) scale(0); }
+    to { transform: rotate(45deg) scale(1); }
+}
+
+/* Improved color picker */
 .gui-color-picker {
-    width: 15px;
-    height: 15px;
+    width: 18px;
+    height: 18px;
     border-radius: 4px;
     position: relative;
-    margin: 8px;
+    margin: 4px;
     cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 300ms var(--spring-easing),
+                box-shadow 300ms var(--standard-easing);
+    will-change: transform, box-shadow;
+}
+
+.gui-color-picker:hover {
+    transform: none;
+    box-shadow: none;
 }
 
 .gui-color-input {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     opacity: 0;
     cursor: pointer;
 }
@@ -129,92 +220,1020 @@
     background-color: var(--panel-bg);
     display: flex;
     flex-direction: column;
+    max-height: 70vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+    will-change: transform, scroll-position;
+    perspective: 1000px;
 }
 
+/* Universal scrollbar styling */
+.scrollable-container {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) rgba(0, 0, 0, 0.1);
+}
+
+.scrollable-container::-webkit-scrollbar {
+    width: var(--scroller-size);
+    height: var(--scroller-size);
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transition: background 300ms var(--standard-easing);
+}
+
+.scrollable-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.scrollable-container::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Apply scrollable class to all scrollable elements */
+.gui-button-container,
+.gui-search-results,
+.gui-settings-wrapper,
+.module-settings {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) rgba(0, 0, 0, 0.1);
+}
+
+.gui-button-container::-webkit-scrollbar,
+.gui-search-results::-webkit-scrollbar,
+.gui-settings-wrapper::-webkit-scrollbar,
+.module-settings::-webkit-scrollbar {
+    width: var(--scroller-size);
+}
+
+.gui-button-container::-webkit-scrollbar-track,
+.gui-search-results::-webkit-scrollbar-track,
+.gui-settings-wrapper::-webkit-scrollbar-track,
+.module-settings::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.gui-button-container::-webkit-scrollbar-thumb,
+.gui-search-results::-webkit-scrollbar-thumb,
+.gui-settings-wrapper::-webkit-scrollbar-thumb,
+.module-settings::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transition: background 300ms var(--standard-easing);
+}
+
+.gui-button-container::-webkit-scrollbar-thumb:hover,
+.gui-search-results::-webkit-scrollbar-thumb:hover,
+.gui-settings-wrapper::-webkit-scrollbar-thumb:hover,
+.module-settings::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Enhanced text input */
 .gui-text-input {
-    background: var(--button-color);
+    background: rgba(255, 255, 255, 0.1);
     border: none;
     color: var(--text-color);
-    font-family: 'Product Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: var(--setting-text-size);
-    width: 40px;
+    width: 42px;
     border-radius: 4px;
     outline: none;
-    transition: background 0.3s;
     text-align: center;
-    margin: 5px;
-    margin-right: 10px;
+    margin: 4px;
+    padding: 4px 0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 250ms var(--standard-easing);
+    will-change: background-color, border-color, box-shadow;
 }
 
 .gui-text-input:hover {
-    background: var(--hover-color);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: none;
 }
 
 .gui-text-input:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 2px var(--glow-color);
+}
+
+/* Search container styling */
+.gui-search-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    z-index: 1001;
+    width: 350px;
+    border-radius: var(--border-radius);
+    background: var(--panel-bg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(var(--blur-intensity));
+    overflow: hidden;
+    will-change: transform, opacity, box-shadow;
+    transform-origin: center top;
+}
+
+.gui-search-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    height: 48px;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--panel-bg);
+}
+
+.gui-search-icon {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+    margin-right: 10px;
+    transition: color 150ms var(--standard-easing);
+}
+
+.gui-search-input:focus + .gui-search-icon,
+.gui-search-wrapper:hover .gui-search-icon {
+    color: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+}
+
+.gui-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-color);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    width: 100%;
+    height: 36px; /* Added explicit height */
+    padding: 0 8px; /* Added padding */
+    transition: all 150ms var(--standard-easing);
+}
+
+.gui-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+    transition: color 200ms var(--standard-easing),
+                transform 200ms var(--standard-easing);
+}
+
+.gui-search-input:focus::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+    transform: translateX(2px);
+}
+
+.gui-search-results {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+    opacity: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: var(--panel-bg);
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.gui-search-results::-webkit-scrollbar {
+    display: none;
+}
+
+.gui-search-results.visible {
+    opacity: 1;
+    display: block;
+}
+
+.gui-search-result {
+    padding: 12px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    background: var(--panel-bg);
+}
+
+.gui-search-result:hover {
     background: var(--hover-color);
 }
 
-.with-animations .gui-panel {
-    animation: fadeInScale 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+.gui-search-result.enabled {
+    background: var(--trollium-accent-color) !important;
+    color: white;
 }
 
-@keyframes fadeInScale {
+.gui-search-result-name {
+    font-weight: 500;
+    font-size: 16px;
+    transition: transform 200ms var(--spring-easing);
+    transform-origin: left center;
+}
+
+.gui-search-result:hover .gui-search-result-name {
+    transform: none;
+}
+
+.gui-search-result-category {
+    font-size: 12px;
+    opacity: 0.7;
+    padding: 3px 8px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    font-weight: 400;
+    transform-origin: right center;
+    transition: transform 200ms var(--spring-easing),
+                background-color 200ms var(--standard-easing),
+                box-shadow 200ms var(--standard-easing);
+}
+
+.gui-search-result:hover .gui-search-result-category {
+    transform: none;
+    background: rgba(0, 0, 0, 0.25);
+    box-shadow: none;
+}
+
+.gui-search-no-results {
+    padding: 20px;
+    text-align: center;
+    font-weight: 300;
+    opacity: 0.7;
+    animation: fadeInUp 400ms var(--decelerate-easing);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 0.7;
+        transform: translateY(0);
+    }
+}
+
+/* New animation implementations */
+.with-animations .gui-panel {
+    animation: panelAppear var(--panel-appear-duration) var(--spring-easing) forwards;
+    transform-origin: center;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+@keyframes panelAppear {
     0% {
         opacity: 0;
-        transform: scale(calc(1 - 0.2 * var(--animation-scale)));
+        transform: perspective(1200px) scale(0.95) translateY(10px) rotateX(-5deg);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
     }
-    60% {
+    70% {
         opacity: 1;
-        transform: scale(calc(1 + 0.1 * var(--animation-scale)));
+        transform: perspective(1200px) scale(1.01) translateY(-2px) rotateX(1deg);
+        box-shadow: 0 15px 35px var(--shadow-color);
     }
     100% {
         opacity: 1;
-        transform: scale(1);
+        transform: perspective(1200px) scale(1) translateY(0) rotateX(0);
+        box-shadow: 0 8px 24px var(--shadow-color);
     }
 }
 
 .with-animations .gui-background {
-    animation: fadeIn 0.5s ease-out;
+    animation: backgroundFadeIn 600ms var(--decelerate-easing) forwards;
 }
 
-@keyframes fadeIn {
-    0% { opacity: 0; transform: scale(calc(1 + 0.05 * var(--animation-scale))); }
-    100% { opacity: 1; transform: scale(1); }
+@keyframes backgroundFadeIn {
+    0% { 
+        opacity: 0; 
+        backdrop-filter: blur(0px); 
+        background: rgba(0, 0, 0, 0);
+    }
+    100% { 
+        opacity: 1; 
+        backdrop-filter: blur(8px); 
+        background: rgba(0, 0, 0, 0.4);
+    }
 }
 
+/* Animated buttons with staggered reveal */
 .with-animations .gui-button {
-    transition: transform 0.2s ease, background 0.2s ease;
+    animation: buttonReveal var(--button-appear-duration) var(--spring-easing) both;
+    animation-delay: calc(var(--index, 0) * 40ms + 100ms);
 }
 
-.with-animations .gui-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-}
-
-.with-animations .gui-setting-container {
-    will-change: transform, opacity;
-    transform-origin: top;
-    animation: slideDown 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-}
-
-@keyframes slideDown {
+@keyframes buttonReveal {
     0% {
         opacity: 0;
-        transform: scaleY(calc(1 - 0.5 * var(--animation-scale)));
-    }
-    70% {
-        opacity: 1;
-        transform: scaleY(calc(1 + 0.1 * var(--animation-scale)));
+        transform: translateX(-10px);
+        filter: blur(2px);
     }
     100% {
         opacity: 1;
-        transform: scaleY(1);
+        transform: translateX(0);
+        filter: blur(0);
     }
 }
 
-/* Dragging animation for panels */
+.with-animations .gui-button.enabled {
+    position: relative;
+    overflow: hidden;
+}
+
+.with-animations .gui-button.enabled::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-25deg);
+    animation: shimmer 3s infinite;
+    will-change: transform;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 200%;
+    }
+}
+
+/* Setting container animations */
+.with-animations .gui-setting-container {
+    animation: settingReveal var(--setting-appear-duration) var(--spring-easing) both;
+    animation-delay: calc(var(--index, 0) * 50ms);
+}
+
+@keyframes settingReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(-5px) scale(0.97);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Preserve dragging animation */
 .with-animations .gui-panel.dragging {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.03);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+    animation: none;
+}
+
+/* Search animations */
+.with-animations .gui-search-container {
+    animation: searchReveal var(--search-appear-duration) var(--spring-easing) forwards;
+}
+
+@keyframes searchReveal {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px) scale(0.95);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+    70% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(5px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+}
+
+.with-animations .gui-search-results.visible {
+    animation: resultsAppear 500ms var(--spring-easing) forwards;
+}
+
+@keyframes resultsAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(-15px) scaleY(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scaleY(1);
+    }
+}
+
+.with-animations .gui-search-result {
+    animation: resultItemAppear 400ms var(--spring-easing) both;
+    animation-delay: calc(var(--index, 0) * 30ms);
+}
+
+@keyframes resultItemAppear {
+    0% {
+        opacity: 0;
+        transform: translateX(-8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Ultra smooth scrolling for all containers */
+.smooth-scroll {
+    scroll-behavior: smooth;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: y proximity;
+}
+
+.smooth-scroll > * {
+    scroll-snap-align: start;
+}
+
+/* Module settings styling for smooth scrolling */
+.module-settings {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 4px 5px;
+    cursor: default;
+    background: var(--panel-bg);
+    border-radius: 4px;
+    margin-top: 2px;
+    will-change: transform, scroll-position;
+    perspective: 1000px; /* Helps with smoother scrolling */
+    backface-visibility: hidden; /* Prevents flickering */
+}
+
+/* Completely hide scrollbar */
+.module-settings::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+    display: none;
+}
+
+/* Module settings content */
+.module-settings-container {
+    position: relative;
+    padding: 0;
+    background: var(--panel-bg);
+    border-radius: 4px;
+}
+
+/* Improved GUI settings wrapper */
+.gui-settings-wrapper {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 5px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    margin: 3px 0;
+    transform-style: flat;
+    will-change: transform, scroll-position;
+    overscroll-behavior: contain;
+}
+
+/* Module settings entry and exit animations */
+.module-settings-enter {
+    animation: settingsEnterClean 300ms var(--spring-easing) forwards;
+    will-change: opacity, max-height, transform;
+}
+
+.module-settings-exit {
+    animation: settingsExitClean 200ms var(--accelerate-easing) forwards;
+    will-change: opacity, max-height, transform;
+}
+
+@keyframes settingsEnterClean {
+    0% {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        max-height: 300px;
+        transform: translateY(0);
+    }
+}
+
+@keyframes settingsExitClean {
+    0% {
+        opacity: 1;
+        max-height: 300px;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-5px);
+    }
+}
+
+/* Smooth scroll indicator */
+.scroll-indicator {
+    position: absolute;
+    right: 0;
+    width: var(--scroller-size);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 300ms var(--standard-easing);
+    z-index: 10;
+    pointer-events: none;
+}
+
+.scrollable-container:hover .scroll-indicator {
+    opacity: 1;
+}
+
+/* Beautiful focus effect for interactive elements */
+.interactive-focus {
+    position: relative;
+    overflow: hidden;
+}
+
+.interactive-focus::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transform: scale(1.5);
+    pointer-events: none;
+    transition: transform 500ms var(--standard-easing),
+                opacity 500ms var(--standard-easing);
+    border-radius: inherit;
+}
+
+.interactive-focus:focus::after,
+.interactive-focus:active::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Apply interactive focus to relevant elements */
+.gui-button,
+.gui-search-result,
+.gui-setting-container,
+.gui-checkbox,
+.gui-color-picker {
+    position: relative;
+    overflow: hidden;
+}
+
+.gui-button::after,
+.gui-search-result::after,
+.gui-setting-container::after,
+.gui-checkbox::after,
+.gui-color-picker::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    transform: scale(1.5);
+    pointer-events: none;
+    transition: transform 500ms var(--standard-easing),
+                opacity 500ms var(--standard-easing);
+    border-radius: inherit;
+}
+
+.gui-button:active::after,
+.gui-search-result:active::after,
+.gui-setting-container:active::after,
+.gui-checkbox:active::after,
+.gui-color-picker:active::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Visual refinements for GUI elements */
+.gui-button-container {
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.gui-search-container {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.gui-panel {
+    box-shadow: 0 8px 24px var(--shadow-color),
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                0 0 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Scrollbar track glow effect on active scrolling */
+.scrolling-active::-webkit-scrollbar-track {
+    background: rgba(64, 190, 255, 0.05);
+}
+
+.scrolling-active::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Canvas effect for search results background */
+.gui-search-results::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(
+            circle at 10% 20%, 
+            rgba(64, 190, 255, 0.03) 0%, 
+            transparent 50%
+        ),
+        radial-gradient(
+            circle at 90% 80%, 
+            rgba(129, 225, 255, 0.03) 0%, 
+            transparent 40%
+        );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 500ms var(--standard-easing);
+}
+
+.gui-search-results.visible::before {
+    opacity: 1;
+}
+
+/* Additional animations and interactions */
+.pulse {
+    animation: pulse 300ms var(--spring-easing);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.pressed {
+    animation: none !important;
+}
+
+.context-clicked {
+    animation: none !important;
+}
+
+.gui-search-container.animate-in {
+    animation: none !important;
+}
+
+.gui-search-container.animate-out {
+    animation: none !important;
+}
+
+.focused .gui-search-icon {
+    color: rgba(255, 255, 255, 1);
+    transform: none;
+}
+
+.value-changed {
+    animation: none !important;
+}
+
+.color-changed {
+    animation: none !important;
+}
+
+.invalid {
+    animation: none !important;
+    box-shadow: none;
+}
+
+.clicked {
+    animation: none !important;
+}
+
+.appeared {
+    animation: none !important;
+}
+
+/* Fix search result focus style */
+.gui-search-result.focused {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-left: 3px solid rgba(255, 255, 255, 0.3);
+    padding-left: 12px;
+}
+
+/* Additional styling for module settings */
+.module-title {
+    display: none;
+}
+
+.module-description {
+    margin-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-style: italic;
+}
+
+.module-description .gui-setting-label {
+    opacity: 0.7;
+    font-size: 0.9em;
+}
+
+/* Highlight style for search results */
+.highlight {
+    color: rgb(129, 225, 255);
+    font-weight: 500;
+    text-shadow: 0 0 5px rgba(64, 190, 255, 0.5);
+}
+
+/* Animated button hover for contextmenu */
+.gui-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.gui-button:before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: width 0.6s ease-out, height 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+.gui-button:active:before {
+    width: 200px;
+    height: 200px;
+    opacity: 1;
+    transition: width 0.4s ease-out, height 0.4s ease-out, opacity 0.1s ease-in;
+}
+
+/* Elastic animation for dragging */
+@keyframes elastic-bounce {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.05); }
+    60% { transform: scale(0.98); }
+    100% { transform: scale(1); }
+}
+
+.gui-panel.dragging {
+    animation: none !important;
+}
+
+/* 3D perspective effects */
+.with-3d-effect {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: transform 0.3s var(--spring-easing);
+}
+
+.with-3d-effect:hover {
+    transform: none;
+}
+
+/* Interactive state for elements */
+.gui-button:active,
+.gui-checkbox:active,
+.gui-color-picker:active,
+.gui-text-input:focus {
+    transform: none;
+}
+
+/* Add emphasis to current panel */
+.gui-panel:hover .gui-header {
+    background: linear-gradient(to bottom, 
+        rgba(0, 0, 0, 0.9) 0%, 
+        rgba(0, 0, 0, 0.85) 100%
+    );
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Tooltip styling */
+.module-tooltip {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(5px);
+    background: var(--tooltip-bg);
+    color: var(--text-color);
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: none;
+    width: max-content;
+    max-width: 200px;
+    z-index: 10;
+    text-align: center;
+    white-space: normal;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+/* Show tooltip immediately without animation */
+.has-tooltip:hover .module-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(5px);
+    transition: none;
+}
+
+/* Add styling for search clear button */
+.gui-search-clear {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 10px;
+    line-height: 36px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 10;
+}
+
+.gui-search-clear:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Remove any remaining hover effects */
+.gui-button:hover,
+.gui-setting-container:hover,
+.gui-color-picker:hover,
+.gui-search-result:hover,
+.gui-text-input:hover {
+    transition: none;
+}
+
+/* Make search wrapper more obvious */
+.gui-search-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    height: 48px;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--panel-bg);
+}
+
+/* Make it explicit that tooltips do not appear */
+.tooltip,
+.module-tooltip,
+.has-tooltip .module-tooltip,
+.has-tooltip:hover .module-tooltip {
+    display: none;
+}
+
+/* Search mode - add class when in search mode */
+body.search-mode .gui-panel,
+body.search-mode .gui-background {
+    display: none !important;
+}
+
+body.search-mode .gui-search-container {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Improve search focus colors to match the theme */
+.gui-search-wrapper.focused {
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Search mode transitions */
+body.search-mode-enter .gui-panel,
+body.search-mode-enter .gui-background {
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+    pointer-events: none;
+}
+
+body.search-mode-exit .gui-panel,
+body.search-mode-exit .gui-background {
+    opacity: 1;
+    transition: opacity 300ms ease-in;
+    pointer-events: auto;
+}
+
+/* Search container transition when in search mode */
+body.search-mode .gui-search-container {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.08);
+    transition: box-shadow 200ms ease-out;
+}
+
+/* Hide all scrollbars but keep smooth scrolling */
+.gui-search-results {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+    opacity: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: var(--panel-bg);
+}
+
+.gui-search-results::-webkit-scrollbar {
+    display: none;
+}
+
+.module-settings::-webkit-scrollbar {
+    display: none;
+}
+
+/* Remove all scrollbars but keep scrolling */
+.module-settings,
+.gui-button-container,
+.gui-search-results,
+.scrollable-container,
+.gui-settings-wrapper {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    perspective: 1000px;
+}
+
+/* Hide webkit scrollbars */
+.module-settings::-webkit-scrollbar,
+.gui-button-container::-webkit-scrollbar,
+.gui-search-results::-webkit-scrollbar,
+.scrollable-container::-webkit-scrollbar,
+.gui-settings-wrapper::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+/* Remove all scrollbar styling completely */
+.scrollable-container::-webkit-scrollbar-track,
+.scrollable-container::-webkit-scrollbar-thumb,
+.scrollable-container::-webkit-scrollbar-thumb:hover,
+.scrollable-container::-webkit-scrollbar-corner,
+.gui-button-container::-webkit-scrollbar-track,
+.gui-button-container::-webkit-scrollbar-thumb,
+.gui-button-container::-webkit-scrollbar-thumb:hover,
+.scrolling-active::-webkit-scrollbar-track,
+.scrolling-active::-webkit-scrollbar-thumb {
+    display: none;
+}
+
+/* Remove scroll indicators completely */
+.scroll-indicator {
+    display: none;
+}
+
+/* Remove animate-in and animate-out classes completely */
+.animate-in, 
+.animate-out {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
 }
