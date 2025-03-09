@@ -61,32 +61,60 @@ export default class Scaffold extends Module {
 
         blockPos[1]--;
         
-        let movingX = Math.abs(playerPos[0] - blockPos[0] - 0.5) > 0.2;
-        let movingZ = Math.abs(playerPos[2] - blockPos[2] - 0.5) > 0.2;
+        // Calculate positions for diagonal movement detection
+        const playerX = playerPos[0];
+        const playerZ = playerPos[2];
+        const blockX = blockPos[0];
+        const blockZ = blockPos[2];
         
-        // if moving diagonally
-        if (movingX && movingZ) {
-            let lastX = Math.floor(playerPos[0] - 0.5);
-            let lastZ = Math.floor(playerPos[2] - 0.5);
-            
-            // place support block
-            this.place([lastX, blockPos[1], lastZ]);
-            // place diagonal block
+        // Improved diagonal detection
+        let movingX = Math.abs(playerX - blockX - 0.5) > 0.2;
+        let movingZ = Math.abs(playerZ - blockZ - 0.5) > 0.2;
+        
+        // If moving in any direction
+        if (isMoving) {
+            // Place block directly below player
             this.place(blockPos);
-
-            if (hooks.noa.inputs.state.jump) {
-                blockPos[1]--;
-                // place support block
-                this.place([lastX, blockPos[1], lastZ]);
-                // place diagonal block
-                this.place(blockPos);
+            
+            // If moving diagonally, handle additional blocks
+            if (movingX && movingZ) {
+                // Determine the direction of movement
+                let offsetX = Math.sign(playerX - (blockX + 0.5));
+                let offsetZ = Math.sign(playerZ - (blockZ + 0.5));
+                
+                // Place blocks in the direction of movement to fill diagonal gaps
+                if (offsetX !== 0) {
+                    this.place([blockX + offsetX, blockPos[1], blockZ]);
+                }
+                
+                if (offsetZ !== 0) {
+                    this.place([blockX, blockPos[1], blockZ + offsetZ]);
+                }
+                
+                // Place the diagonal block itself
+                this.place([blockX + offsetX, blockPos[1], blockZ + offsetZ]);
             }
-        } else {
-            this.place(blockPos);
             
+            // Handle jumping while moving
             if (hooks.noa.inputs.state.jump) {
                 blockPos[1]--;
                 this.place(blockPos);
+                
+                // Also handle diagonal jumps
+                if (movingX && movingZ) {
+                    let offsetX = Math.sign(playerX - (blockX + 0.5));
+                    let offsetZ = Math.sign(playerZ - (blockZ + 0.5));
+                    
+                    if (offsetX !== 0) {
+                        this.place([blockX + offsetX, blockPos[1], blockZ]);
+                    }
+                    
+                    if (offsetZ !== 0) {
+                        this.place([blockX, blockPos[1], blockZ + offsetZ]);
+                    }
+                    
+                    this.place([blockX + offsetX, blockPos[1], blockZ + offsetZ]);
+                }
             }
         }
     }
